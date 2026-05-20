@@ -4,6 +4,8 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     private Rigidbody2D rb;
+    
+    [SerializeField]
     private SpriteRenderer sr;
 
     [Header("ジャンプ設定")]
@@ -27,14 +29,12 @@ public class PlayerController : MonoBehaviour
 
     public GameObject gameOverText;
 
-    void Start()
+    private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-
-        sr = GetComponent<SpriteRenderer>();
     }
 
-    void Update()
+    private void Update()
     {
         // 死亡中は処理しない
         if (isDead) return;
@@ -93,7 +93,7 @@ public class PlayerController : MonoBehaviour
     }
 
     // ゲームオーバーまで待つ
-    IEnumerator GameOverDelay()
+    private IEnumerator GameOverDelay()
     {
         // 「痛い！」が消えるまで待つ
         yield return new WaitForSecondsRealtime(1f);
@@ -102,7 +102,7 @@ public class PlayerController : MonoBehaviour
     }
 
     // ゲームオーバー処理
-    void GameOver()
+    private void GameOver()
     {
         isDead = true;
 
@@ -125,7 +125,7 @@ public class PlayerController : MonoBehaviour
     }
 
     // 無敵＆点滅
-    IEnumerator Invincible()
+    private IEnumerator Invincible()
     {
         isInvincible = true;
 
@@ -153,7 +153,7 @@ public class PlayerController : MonoBehaviour
     }
 
     // 「痛い！」UIを消す
-    void HideDamageText()
+    private void HideDamageText()
     {
         if (damageText != null)
         {

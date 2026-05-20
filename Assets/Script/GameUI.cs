@@ -7,24 +7,27 @@ using UnityEngine.SceneManagement;
 
 public class GameUI : MonoBehaviour
 {
-    [Header("UI")] [SerializeField] private TextMeshProUGUI countDownText;
+    [Header("UI")]
+    [SerializeField] private TextMeshProUGUI countDownText;
     [SerializeField] private TextMeshProUGUI distanceText;
     [SerializeField] private TMP_Text velocityText;
 
-    [Header("Player")] [SerializeField] private Transform player;
+    [Header("Player")] 
+    [SerializeField] private Transform player;
 
-    [Header("Goal")] [SerializeField] private Transform goalPos;
+    [Header("Goal")]
+    [SerializeField] private Transform goalPos;
 
     private bool gameStart;
     private float scoreTimer;
     public event Action OnCountDownComplete;
 
-    void Start()
+    private void Start()
     {
         StartCoroutine(CountDown());
     }
 
-    void Update()
+    private void Update()
     {
         // カウント中は動かない
         if (!gameStart) return;
@@ -40,12 +43,9 @@ public class GameUI : MonoBehaviour
         if (remainDistance <= 0)
         {
             gameStart = false;
-
             distanceText.text = "GOAL!";
-
             RankingManager.SaveRanking(scoreTimer);
-
-            SceneTransition.Instance.SceneLoad(SceneName.Clear);
+            // SceneTransition.Instance.SceneLoad(SceneName.Clear);
         }
         else
         {
@@ -53,33 +53,34 @@ public class GameUI : MonoBehaviour
         }
     }
 
-    IEnumerator CountDown()
+    private IEnumerator CountDown()
     {
-        countDownText.text = "3";
-        yield return new WaitForSeconds(1);
+        // 開幕フェード分のバッファ
+        yield return new WaitForSeconds(0.5f);
 
-        countDownText.text = "2";
-        yield return new WaitForSeconds(1);
-
-        countDownText.text = "1";
-        yield return new WaitForSeconds(1);
+        int startCount = 3;
+        while (startCount-- > 1)
+        {
+            countDownText.text = startCount.ToString();
+            yield return new WaitForSeconds(1);
+        }
 
         countDownText.text = "START!";
+        
         yield return new WaitForSeconds(1);
+        OnCountDownComplete?.Invoke();
 
         countDownText.text = "";
-
-        OnCountDownComplete?.Invoke();
         gameStart = true;
     }
 
-    void ScoreTimer()
+    private void ScoreTimer()
     {
         scoreTimer += Time.deltaTime;
     }
 
     public void UpdateVelocityText(float velocity)
     {
-        velocityText.text = velocity.ToString("F1") + " m/s";
+        velocityText.text = velocity.ToString("F1") + " km/s";
     }
 }

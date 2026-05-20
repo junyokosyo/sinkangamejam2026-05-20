@@ -12,6 +12,8 @@ public class Enemy : MonoBehaviour
 
     [Header("ダメージ設定")]
     public int damage = 1;
+    
+    public bool hasQTESucceed;
 
     // QTE重複防止
     private bool hasStartedQTE;
@@ -39,6 +41,11 @@ public class Enemy : MonoBehaviour
     // Triggerに入った瞬間
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        // QTE成功してたら何もしない
+        if (hasQTESucceed)
+        {
+            return;
+        }
         // Playerに当たった
         if (collision.CompareTag("Player"))
         {

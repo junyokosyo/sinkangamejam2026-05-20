@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Carmovement : MonoBehaviour
+public class CarMovement : MonoBehaviour
 {
     public float speed = 2.0f;
     private Vector3 startPosition;

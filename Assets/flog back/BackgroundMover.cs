@@ -1,30 +1,32 @@
 using UnityEngine;
-using UnityEngine.Assertions;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Image))]
 public class BackGroundMover : MonoBehaviour
 {
-    private const float k_maxLength = 1f;
-    private const string k_propName = "_MainTex";
-
     [SerializeField]
-    private Vector2 m_offsetSpeed;
+    private float _scrollSpeed;
 
-    private Material m_copiedMaterial;
+    private RectTransform _rectTransform;
+    private float _imageWidth;
 
     private void Start()
     {
-        var image = GetComponent<Image>();
-        m_copiedMaterial = image.material;
-
-        // マテリアルがnullだったら例外が出ます。
-        Assert.IsNotNull(m_copiedMaterial);
+        _rectTransform = GetComponent<RectTransform>();
+        
+        // 画像の横幅を取得
+        _imageWidth = _rectTransform.rect.width;
+        
+        // 画像の横幅を二倍にする
+        var sizeDelta = _rectTransform.sizeDelta;
+        sizeDelta.x *= 2f;
+        _rectTransform.sizeDelta = sizeDelta;
+        _imageWidth *= 2f;
     }
 
     public void SetSpeed(float speed)
     {
-        m_offsetSpeed = Vector2.right * (speed * Time.fixedDeltaTime);
+        _scrollSpeed = speed;
     }
 
     private void Update()
@@ -34,12 +36,17 @@ public class BackGroundMover : MonoBehaviour
             return;
         }
 
-        // xとyの値が0 ～ 1でリピートするようにする
-        var x = Mathf.Repeat(Time.time * m_offsetSpeed.x, k_maxLength);
-        var y = Mathf.Repeat(Time.time * m_offsetSpeed.y, k_maxLength);
-        var offset = new Vector2(x, y);
-        m_copiedMaterial.SetTextureOffset(k_propName, offset);
+        // 時間に応じて左にスクロール
+        float scrollDistance = _scrollSpeed * Time.deltaTime;
+        var pos = _rectTransform.anchoredPosition;
+        pos.x -= scrollDistance;
+        
+        // 画像が完全に左端に移動したらリセット
+        if (pos.x <= -_imageWidth / 2f)
+        {
+            pos.x += _imageWidth / 2f;
+        }
+        
+        _rectTransform.anchoredPosition = pos;
     }
-
-
 }

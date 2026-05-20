@@ -18,10 +18,12 @@ public class EnemySpawner : MonoBehaviour
 
     private float timer;
     private bool _isActive;
+    private Enemy currentEnemy;
 
     private void Start()
     {
         InGameManager.OnStart += () => _isActive = true;
+        qteManager.OnQTEFinished += SetEnemyActiveByQTE;
     }
     
     public void SetEnemySpeed(float speed)
@@ -29,7 +31,23 @@ public class EnemySpawner : MonoBehaviour
         enemySpeed = speed;
     }
 
-    void Update()
+    private void SetEnemyActiveByQTE(bool isSucceed)
+    {
+        if (!isSucceed)
+        {
+            return;
+        }
+
+        if (currentEnemy == null)
+        {
+            return;
+        }
+        
+        // QTE成功時、敵の当たり判定を無効化する
+        currentEnemy.hasQTESucceed = true;
+    }
+
+    private void Update()
     {
         if (!_isActive)
         {
@@ -49,7 +67,7 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
-    void SpawnEnemy()
+    private void SpawnEnemy()
     {
         GameObject enemyObj =
             Instantiate(
@@ -64,8 +82,10 @@ public class EnemySpawner : MonoBehaviour
         enemy.player = playerTransform;
 
         enemy.qteManager = qteManager;
+        
+        currentEnemy = enemy;
 
-        Carmovement move = enemyObj.GetComponent<Carmovement>();
+        CarMovement move = enemyObj.GetComponent<CarMovement>();
         
         move.speed = enemySpeed;
 

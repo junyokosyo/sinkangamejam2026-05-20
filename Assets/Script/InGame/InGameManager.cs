@@ -16,7 +16,7 @@ public class InGameManager : MonoBehaviour
     [SerializeField] private GameUI gameUI;
     [SerializeField] private TypingWindowManager typingWindowManager;
     [SerializeField] private QTEManager qTEManager;
-    [SerializeField] private BackGroundMover backGroundMover;
+    [SerializeField] private BackgroundLooper backGroundMover;
     [SerializeField] private EnemySpawner enemySpawner;
 
     public static event Action OnStart;
