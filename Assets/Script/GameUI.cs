@@ -1,22 +1,23 @@
+using System;
 using System.Collections;
+using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameUI : MonoBehaviour
 {
-    [Header("UI")]
-    [SerializeField] private TextMeshProUGUI countDownText;
+    [Header("UI")] [SerializeField] private TextMeshProUGUI countDownText;
     [SerializeField] private TextMeshProUGUI distanceText;
+    [SerializeField] private TMP_Text velocityText;
 
-    [Header("Player")]
-    [SerializeField] private Transform player;
+    [Header("Player")] [SerializeField] private Transform player;
 
-    [Header("Goal")]
-    [SerializeField] private Transform goalPoji;
+    [Header("Goal")] [SerializeField] private Transform goalPos;
 
-    private bool gameStart = false;
-    private float scoreTimer = 0;
+    private bool gameStart;
+    private float scoreTimer;
+    public event Action OnCountDownComplete;
 
     void Start()
     {
@@ -29,14 +30,11 @@ public class GameUI : MonoBehaviour
         if (!gameStart) return;
 
         float remainDistance =
-            goalPoji.position.x - player.position.x;
+            goalPos.position.x - player.position.x;
 
         remainDistance = Mathf.Max(0, remainDistance);
 
-        distanceText.text =
-            "ゴールまで あと " +
-            remainDistance.ToString("F1") +
-            " m";
+        distanceText.text = $"ゴールまで あと {remainDistance:F1} m";
 
         // ゴール
         if (remainDistance <= 0)
@@ -45,9 +43,9 @@ public class GameUI : MonoBehaviour
 
             distanceText.text = "GOAL!";
 
-           RankingManager.SaveRanking(scoreTimer);
+            RankingManager.SaveRanking(scoreTimer);
 
-            SceneManager.LoadScene("Result");
+            SceneTransition.Instance.SceneLoad(SceneName.Clear);
         }
         else
         {
@@ -71,10 +69,17 @@ public class GameUI : MonoBehaviour
 
         countDownText.text = "";
 
+        OnCountDownComplete?.Invoke();
         gameStart = true;
     }
+
     void ScoreTimer()
     {
         scoreTimer += Time.deltaTime;
+    }
+
+    public void UpdateVelocityText(float velocity)
+    {
+        velocityText.text = velocity.ToString("F1") + " m/s";
     }
 }

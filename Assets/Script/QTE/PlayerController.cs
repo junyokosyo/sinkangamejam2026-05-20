@@ -43,10 +43,7 @@ public class PlayerController : MonoBehaviour
         if (rb.linearVelocity.y < 0)
         {
             rb.linearVelocity +=
-                Vector2.up *
-                Physics2D.gravity.y *
-                (fallMultiplier - 1) *
-                Time.deltaTime;
+                Vector2.up * (Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime);
         }
     }
 

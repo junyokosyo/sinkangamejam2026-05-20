@@ -1,28 +1,40 @@
-using System.Collections.Generic;
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
 using UnityEngine.InputSystem.Utilities;
+using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
-public class Theme : MonoBehaviour
+public class TypingWindowManager : MonoBehaviour
 {
     [SerializeField]
     private Yells _yells;
 
     [SerializeField]
-    private TextMeshPro JapaneseText;
+    private TMP_Text JapaneseText;
 
     [SerializeField]
-    private TextMeshPro EnglishText;
+    private TMP_Text EnglishText;
+    
+    [SerializeField]
+    private Image _backgroundImage;
 
     private int _selectedIndex;
-    private bool _isQTEActive = false;
-    private bool _isMissing = false;
+    private bool _isQTEActive;
+    private bool _isMissing;
+    public event Action<bool> OnTypingComplete;
 
-    void Start()
+    private void Start()
+    {
+        _backgroundImage.gameObject.SetActive(false);
+    }
+
+    public void GameStart()
     {
         _selectedIndex = _yells.YellTextDataArray.Length;
+        _backgroundImage.gameObject.SetActive(true);
         OnSelect();
 
         InputSystem.onAnyButtonPress.Call(OnAnyKeyPressed);
@@ -31,6 +43,7 @@ public class Theme : MonoBehaviour
     public void SetQTE(bool isActive)
     {
         _isQTEActive = isActive;
+        _backgroundImage.gameObject.SetActive(!isActive);
     }
 
     private void OnAnyKeyPressed(InputControl control)
@@ -59,14 +72,7 @@ public class Theme : MonoBehaviour
         TryRemoveCharFromTexts(keyChar);
         if (EnglishText.text == "")
         {
-            if (_isMissing)
-            {
-                Debug.Log("miss");
-            }
-            else
-            {
-                Debug.Log("clear");
-            }
+            OnTypingComplete?.Invoke(_isMissing);
 
             OnSelect();
         }
@@ -98,7 +104,6 @@ public class Theme : MonoBehaviour
             {
                 EnglishText.text = EnglishText.text.Remove(0, 1);
             }
-            return;
         }
     }
 

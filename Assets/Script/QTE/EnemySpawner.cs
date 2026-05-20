@@ -19,9 +19,19 @@ public class EnemySpawner : MonoBehaviour
     public QTEManager qteManager;
 
     private float timer;
+    private bool _isActive;
+
+     private void Start()
+    {
+        InGameManager.OnStart += () => _isActive = true;
+    }
 
     void Update()
     {
+        if (!_isActive)
+        {
+            return;
+        }
         // Player死亡時停止
         if (player.isDead) return;
 

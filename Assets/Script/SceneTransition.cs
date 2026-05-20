@@ -13,17 +13,13 @@ public class SceneTransition : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+            StartCoroutine(fadeManager.FadeIn());
+            SceneManager.sceneLoaded += (_, _) => StartCoroutine(fadeManager.FadeIn());
         }
         else
         {
             Destroy(gameObject);
         }
-    }
-
-    private void Start()
-    {
-        StartCoroutine(fadeManager.FadeIn());
-        SceneManager.sceneLoaded += (_, _) => StartCoroutine(fadeManager.FadeIn());
     }
 
     public void SceneLoad(SceneName name)

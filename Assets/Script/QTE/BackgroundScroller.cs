@@ -12,9 +12,7 @@ public class BackgroundScroller : MonoBehaviour
     {
         // 左へ移動
         transform.position +=
-            Vector3.left *
-            scrollSpeed *
-            Time.deltaTime;
+            Vector3.left * (scrollSpeed * Time.deltaTime);
 
         // 画面外へ行ったら右へ戻す
         if (transform.position.x <= resetPositionX)

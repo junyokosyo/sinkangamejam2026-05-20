@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class QTEManager : MonoBehaviour
@@ -22,6 +23,8 @@ public class QTEManager : MonoBehaviour
 
     // 回避成功 UI
     public GameObject successText;
+    public event Action<bool> OnQTESwitched;
+    public event Action<bool> OnQTEFinished;
 
     void Update()
     {
@@ -63,6 +66,7 @@ public class QTEManager : MonoBehaviour
         }
 
         Debug.Log("QTE開始");
+        OnQTESwitched?.Invoke(true);
     }
 
     // 成功
@@ -94,6 +98,8 @@ public class QTEManager : MonoBehaviour
         }
 
         Debug.Log("QTE成功");
+        OnQTESwitched?.Invoke(false);
+        OnQTEFinished?.Invoke(true);
     }
 
     // 失敗
@@ -111,6 +117,8 @@ public class QTEManager : MonoBehaviour
         }
 
         Debug.Log("QTE失敗");
+        OnQTESwitched?.Invoke(false);
+        OnQTEFinished?.Invoke(false);
     }
 
     // 回避成功UIを消す

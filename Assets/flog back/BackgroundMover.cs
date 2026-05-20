@@ -22,6 +22,11 @@ public class BackGroundMover : MonoBehaviour
         Assert.IsNotNull(m_copiedMaterial);
     }
 
+    public void SetSpeed(float speed)
+    {
+        m_offsetSpeed = Vector2.right * (speed * Time.fixedDeltaTime);
+    }
+
     private void Update()
     {
         if (Time.timeScale == 0f)
