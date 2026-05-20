@@ -14,6 +14,7 @@
 /[Ll]ogs/
 /[Uu]ser[Ss]ettings/
 
+Assets/TextMesh Pro/
 # ignore AssetTools contents
 /Assets/AssetTools/*
 !/Assets/AssetTools/keep.txt
