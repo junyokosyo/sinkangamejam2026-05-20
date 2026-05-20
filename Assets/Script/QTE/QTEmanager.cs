@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class QTEManager : MonoBehaviour
 {
@@ -20,18 +21,20 @@ public class QTEManager : MonoBehaviour
 
     // PUSH L UI
     public GameObject qteText;
+    [SerializeField] private Image qteTimeLimitImage;
 
     // 回避成功 UI
     public GameObject successText;
     public event Action<bool> OnQTESwitched;
     public event Action<bool> OnQTEFinished;
 
-    void Update()
+    private void Update()
     {
         if (!isQTEActive) return;
 
         // スロー中でも時間を進める
         timer -= Time.unscaledDeltaTime;
+        qteTimeLimitImage.fillAmount = timer / timeLimit;
 
         // Lキー入力
         if (Input.GetKeyDown(qteKey))
@@ -70,7 +73,7 @@ public class QTEManager : MonoBehaviour
     }
 
     // 成功
-    void Success()
+    private void Success()
     {
         isQTEActive = false;
 
@@ -103,7 +106,7 @@ public class QTEManager : MonoBehaviour
     }
 
     // 失敗
-    void Fail()
+    private void Fail()
     {
         isQTEActive = false;
 
@@ -122,7 +125,7 @@ public class QTEManager : MonoBehaviour
     }
 
     // 回避成功UIを消す
-    void HideSuccessText()
+    private void HideSuccessText()
     {
         if (successText != null)
         {

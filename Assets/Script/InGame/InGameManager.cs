@@ -16,7 +16,8 @@ public class InGameManager : MonoBehaviour
     [SerializeField] private GameUI gameUI;
     [SerializeField] private TypingWindowManager typingWindowManager;
     [SerializeField] private QTEManager qTEManager;
-    [SerializeField] private BackGroundMover backGroundMover;
+    [SerializeField] private BackgroundLooper backGroundMover;
+    [SerializeField] private EnemySpawner enemySpawner;
 
     public static event Action OnStart;
 
@@ -39,15 +40,13 @@ public class InGameManager : MonoBehaviour
         qTEManager.OnQTESwitched += typingWindowManager.SetQTE;
         qTEManager.OnQTEFinished += QTECheck;
         typingWindowManager.OnTypingComplete += SpeedUp;
-        backGroundMover.SetSpeed(currentVelocity);
-        gameUI.UpdateVelocityText(currentVelocity);
+        SetSpeed(currentVelocity);
     }
 
     private void SpeedUp(bool isMistaken)
     {
         currentVelocity += additiveSpeed * (isMistaken ? 1 : noMistakeMultiply);
-        backGroundMover.SetSpeed(currentVelocity);
-        gameUI.UpdateVelocityText(currentVelocity);
+        SetSpeed(currentVelocity);
     }
 
     private void QTECheck(bool isSucceed)
@@ -55,9 +54,15 @@ public class InGameManager : MonoBehaviour
         if (!isSucceed)
         {
             currentVelocity = defaultMoveSpeed;
-            backGroundMover.SetSpeed(currentVelocity);
-            gameUI.UpdateVelocityText(currentVelocity);
+            SetSpeed(currentVelocity);
         }
+    }
+
+    private void SetSpeed(float speed)
+    {
+        backGroundMover.SetSpeed(speed);
+        gameUI.UpdateVelocityText(speed);
+        enemySpawner.SetEnemySpeed(speed);
     }
 
     private IEnumerator MoveGoalPosition()
