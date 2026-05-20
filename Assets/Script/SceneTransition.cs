@@ -5,6 +5,7 @@ public class SceneTransition : MonoBehaviour
 {
     [SerializeField]
     private FadeManager fadeManager;
+
     public static SceneTransition Instance { get; private set; }
 
     private void Awake()
@@ -12,14 +13,27 @@ public class SceneTransition : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
+
             DontDestroyOnLoad(gameObject);
+
             StartCoroutine(fadeManager.FadeIn());
-            SceneManager.sceneLoaded += (_, _) => StartCoroutine(fadeManager.FadeIn());
+
+            SceneManager.sceneLoaded += OnSceneLoaded;
         }
         else
         {
             Destroy(gameObject);
         }
+    }
+
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        StartCoroutine(fadeManager.FadeIn());
     }
 
     public void SceneLoad(SceneName name)
