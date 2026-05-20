@@ -1,6 +1,7 @@
-using UnityEngine;
-using TMPro;
 using System.Collections;
+using TMPro;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameUI : MonoBehaviour
 {
@@ -15,6 +16,7 @@ public class GameUI : MonoBehaviour
     [SerializeField] private Transform goalPoji;
 
     private bool gameStart = false;
+    private float scoreTimer = 0;
 
     void Start()
     {
@@ -42,6 +44,14 @@ public class GameUI : MonoBehaviour
             gameStart = false;
 
             distanceText.text = "GOAL!";
+
+           RankingManager.SaveRanking(scoreTimer);
+
+            SceneManager.LoadScene("Result");
+        }
+        else
+        {
+            ScoreTimer();
         }
     }
 
@@ -62,5 +72,9 @@ public class GameUI : MonoBehaviour
         countDownText.text = "";
 
         gameStart = true;
+    }
+    void ScoreTimer()
+    {
+        scoreTimer += Time.deltaTime;
     }
 }
