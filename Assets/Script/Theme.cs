@@ -1,7 +1,9 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
+using UnityEngine.InputSystem.Controls;
+using UnityEngine.InputSystem.Utilities;
 
 public class Theme : MonoBehaviour
 {
@@ -15,72 +17,74 @@ public class Theme : MonoBehaviour
     private TextMeshPro EnglishText;
 
     private int _selectedIndex;
-    private UnityEngine.InputSystem.Key _lastKeyPressed = UnityEngine.InputSystem.Key.None;
+    private bool _isQTEActive = false;
+    private bool _isMissing = false;
 
-    public UnityEngine.InputSystem.Key LastKeyPressed => _lastKeyPressed;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         _selectedIndex = _yells.YellTextDataArray.Length;
         OnSelect();
+
+        InputSystem.onAnyButtonPress.Call(OnAnyKeyPressed);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void SetQTE(bool isActive)
     {
-        OnTyping();
+        _isQTEActive = isActive;
     }
 
-
-    private void OnTyping()
+    private void OnAnyKeyPressed(InputControl control)
     {
         if (Keyboard.current == null) return;
+        if (_isQTEActive) return;
 
-        if (Keyboard.current.anyKey.wasPressedThisFrame)
+        if (control is KeyControl keyCtrl)
         {
-            // 押されたキー情報を記録
-            foreach (var keyCtrl in Keyboard.current.allKeys)
+            if (TryKeyToChar(keyCtrl.keyCode, out char ch))
             {
-                if (keyCtrl.wasPressedThisFrame)
-                {
-                    _lastKeyPressed = keyCtrl.keyCode;
-                    break;
-                }
+                CheckInputKey(ch);
             }
-            // キーを文字に変換して、表示中テキストに含まれていればその文字を削除する
-            var ch = KeyToChar(_lastKeyPressed);
-            if (ch.HasValue)
+        }
+    }
+
+    private void CheckInputKey(char keyChar)
+    {
+        // キーを文字に変換して、表示中テキストに含まれていればその文字を削除する
+        if (keyChar != EnglishText.text[0])
+        {
+            _isMissing = true;
+            return;
+        }
+
+        TryRemoveCharFromTexts(keyChar);
+        if (EnglishText.text == "")
+        {
+            if (_isMissing)
             {
-                TryRemoveCharFromTexts(ch.Value);
-                if (EnglishText.text == "")
-                {
-                    OnSelect();
-                }
+                Debug.Log("miss");
             }
+            else
+            {
+                Debug.Log("clear");
+            }
+
+            OnSelect();
         }
     }
 
     // Key を対応する文字に変換する（簡易実装: 英数字とスペース）
-    private char? KeyToChar(UnityEngine.InputSystem.Key key)
+    private bool TryKeyToChar(Key key, out char result)
     {
+        result = '\0';
         // A-Z
-        if (key >= UnityEngine.InputSystem.Key.A && key <= UnityEngine.InputSystem.Key.Z)
+        if (key >= Key.A && key <= Key.Z)
         {
-            int offset = key - UnityEngine.InputSystem.Key.A;
-            return (char)('a' + offset);
+            int offset = key - Key.A;
+            result =(char)('a' + offset);
+            return true;
         }
-        // Digits 0-9
-        if (key >= UnityEngine.InputSystem.Key.Digit0 && key <= UnityEngine.InputSystem.Key.Digit9)
-        {
-            int offset = key - UnityEngine.InputSystem.Key.Digit0;
-            return (char)('0' + offset);
-        }
-        if (key == UnityEngine.InputSystem.Key.Space) return ' ';
-        if (key == UnityEngine.InputSystem.Key.Period) return '.';
-        if (key == UnityEngine.InputSystem.Key.Comma) return ',';
-        if (key == UnityEngine.InputSystem.Key.Minus) return '-';
-        if (key == UnityEngine.InputSystem.Key.Equals) return '=';
-        return null;
+
+        return false;
     }
 
     // 表示中のテキストの「先頭の1文字」のみをチェックして削除する
@@ -96,24 +100,16 @@ public class Theme : MonoBehaviour
             }
             return;
         }
-
-        // EnglishText が空なら JapaneseText の先頭文字をチェック
-        if (!string.IsNullOrEmpty(JapaneseText.text))
-        {
-            char first = JapaneseText.text[0];
-            if (first == c)
-            {
-                JapaneseText.text = JapaneseText.text.Remove(0, 1);
-            }
-        }
     }
 
     private void OnSelect()
     {
+        _isMissing = false;
+
         // 0から配列の長さまでのランダムな整数を生成
-        int Rand = Random.Range(0, _selectedIndex);
+        int rand = Random.Range(0, _selectedIndex);
         // 生成されたランダムな整数を使用して、配列から要素を取得
-        JapaneseText.text = _yells.YellTextDataArray[Rand].JapaneseText;
-        EnglishText.text = _yells.YellTextDataArray[Rand].EnglishText;
+        JapaneseText.text = _yells.YellTextDataArray[rand].JapaneseText;
+        EnglishText.text = _yells.YellTextDataArray[rand].EnglishText;
     }
 }
