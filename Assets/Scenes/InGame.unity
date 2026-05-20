@@ -149,7 +149,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   qteKey: 108
-  timeLimit: 0.5
+  timeLimit: 1
   slowMotionScale: 0.02
   player: {fileID: 2049429090}
   qteText: {fileID: 1742390106}
@@ -208,6 +208,7 @@ MonoBehaviour:
   typingWindowManager: {fileID: 1122074846}
   qTEManager: {fileID: 193488242}
   backGroundMover: {fileID: 1383129273}
+  enemySpawner: {fileID: 599415958}
 --- !u!4 &286848849
 Transform:
   m_ObjectHideFlags: 0
@@ -880,6 +881,7 @@ MonoBehaviour:
   spawnInterval: 3
   spawnPoint: {fileID: 981053816}
   playerTransform: {fileID: 2049429091}
+  enemySpeed: 0
   player: {fileID: 2049429090}
   qteManager: {fileID: 193488242}
 --- !u!4 &599415959

@@ -2,17 +2,15 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    [Header("生成するEnemy")]
-    public GameObject enemyPrefab;
+    [Header("生成するEnemy")] public GameObject enemyPrefab;
 
-    [Header("生成間隔")]
-    public float spawnInterval = 5f;
+    [Header("生成間隔")] public float spawnInterval = 5f;
 
-    [Header("生成位置")]
-    public Transform spawnPoint;
+    [Header("生成位置")] public Transform spawnPoint;
 
-    [Header("参照")]
-    public Transform playerTransform;
+    [Header("参照")] public Transform playerTransform;
+
+    [SerializeField] private float enemySpeed = 20f;
 
     public PlayerController player;
 
@@ -21,9 +19,14 @@ public class EnemySpawner : MonoBehaviour
     private float timer;
     private bool _isActive;
 
-     private void Start()
+    private void Start()
     {
         InGameManager.OnStart += () => _isActive = true;
+    }
+    
+    public void SetEnemySpeed(float speed)
+    {
+        enemySpeed = speed;
     }
 
     void Update()
@@ -32,6 +35,7 @@ public class EnemySpawner : MonoBehaviour
         {
             return;
         }
+
         // Player死亡時停止
         if (player.isDead) return;
 
@@ -60,6 +64,11 @@ public class EnemySpawner : MonoBehaviour
         enemy.player = playerTransform;
 
         enemy.qteManager = qteManager;
+
+        Carmovement move = enemyObj.GetComponent<Carmovement>();
+        
+        move.speed = enemySpeed;
+
 
         Debug.Log("Enemy生成");
     }
