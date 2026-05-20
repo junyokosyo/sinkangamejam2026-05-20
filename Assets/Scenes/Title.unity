@@ -295,8 +295,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u3048\u30FC\u308B\u3067\u304B\u3048\u30FC\u308B"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 7ea3e86498702d942adedde1c24db89b, type: 2}
-  m_sharedMaterial: {fileID: 2822853075261635362, guid: 7ea3e86498702d942adedde1c24db89b, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 694ed2bf87e8f22428e8c7da0f9545d2, type: 2}
+  m_sharedMaterial: {fileID: 5343893223750271152, guid: 694ed2bf87e8f22428e8c7da0f9545d2, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -327,7 +327,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -359,7 +359,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: -795.76465, w: -247.46295}
+  m_margin: {x: 95.87201, y: 0, z: -1434.9138, w: -247.46295}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
