@@ -12,5 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae2580d01fe6bf94f9ec888631c03a37, type: 3}
   m_Name: Yells
   m_EditorClassIdentifier: 
-  JapaneseYell: []
-  EnglishYell: []
+  YellTextDataArray:
+  - JapaneseText: "\u304C\u3093\u3070\u308C"
+    EnglishText: ganbare
+  - JapaneseText: "\u30D5\u30A1\u30A4\u30C8"
+    EnglishText: faito
