@@ -7,7 +7,8 @@ public class GameOverManeger : MonoBehaviour
 
     void Start()
     {
-   
+        AudioManager.Instance.StopBGM();
+
         AudioManager.Instance.PlaySE(SoundType.GraveapperSE);
         titleButton.onClick.AddListener(OnTitle);
         titleButton.onClick.AddListener(() => AudioManager.Instance.PlaySE(SoundType.UISelectSE));
