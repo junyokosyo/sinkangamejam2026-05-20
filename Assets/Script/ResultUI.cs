@@ -19,15 +19,14 @@ public class ResultUI : MonoBehaviour
             if (time == 9999f)
             {
                 rankingTexts[i].text =
-                    (i + 1) + "位 : ---";
+                    "No."+(i + 1) + ": ---";
 
                 continue;
             }
 
             rankingTexts[i].text =
-                (i + 1) + "位 : " +
-                time.ToString("F2") +
-                " 秒";
+                "No."+(i + 1) + ": " +
+                time.ToString("F2");
         }
     }
 }
