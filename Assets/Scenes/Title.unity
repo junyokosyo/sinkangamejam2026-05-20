@@ -471,7 +471,7 @@ Transform:
   m_GameObject: {fileID: 453735598}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -3.77, z: 0}
+  m_LocalPosition: {x: -1.33, y: -3.77, z: 0}
   m_LocalScale: {x: 0.52, y: 0.52, z: 0.52}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -582,7 +582,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &687150861
 RectTransform:
   m_ObjectHideFlags: 0
@@ -693,6 +693,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1347210392858296379, guid: cecdcb458fea3784b899bda5b559510c, type: 3}
+      propertyPath: m_Pitch
+      value: 1.38
+      objectReference: {fileID: 0}
     - target: {fileID: 1725145030594178132, guid: cecdcb458fea3784b899bda5b559510c, type: 3}
       propertyPath: m_Name
       value: AudioManager
@@ -936,7 +940,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Start
+  m_text: 'START
 
 '
   m_isRightToLeft: 0
@@ -1052,7 +1056,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -141, y: 342}
+  m_AnchoredPosition: {x: -141, y: 396}
   m_SizeDelta: {x: 84, y: 74}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1987659812
@@ -1355,7 +1359,7 @@ SceneRoots:
   - {fileID: 953977372}
   - {fileID: 6335632616622445073}
   - {fileID: 528926409}
+  - {fileID: 453735600}
   - {fileID: 2106599367}
   - {fileID: 41071164}
   - {fileID: 2131966216}
-  - {fileID: 453735600}
