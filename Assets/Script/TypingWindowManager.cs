@@ -62,15 +62,24 @@ public class TypingWindowManager : MonoBehaviour
 
     private void CheckInputKey(char keyChar)
     {
-        // キーを文字に変換して、表示中テキストに含まれていればその文字を削除する
+        // 不一致でミス扱い
         if (keyChar != EnglishText.text[0])
         {
             _isMissing = true;
             return;
         }
 
-        TryRemoveCharFromTexts(keyChar);
-        if (EnglishText.text == "")
+        if (!string.IsNullOrEmpty(EnglishText.text))
+        {
+            char first = EnglishText.text[0];
+            if (char.ToUpperInvariant(first) == char.ToUpperInvariant(keyChar))
+            {
+                EnglishText.text = EnglishText.text.Remove(0, 1);
+            }
+        }
+        
+        
+        if (string.IsNullOrEmpty(EnglishText.text))
         {
             OnTypingComplete?.Invoke(_isMissing);
 
@@ -86,25 +95,11 @@ public class TypingWindowManager : MonoBehaviour
         if (key >= Key.A && key <= Key.Z)
         {
             int offset = key - Key.A;
-            result =(char)('a' + offset);
+            result =(char)('A' + offset);
             return true;
         }
 
         return false;
-    }
-
-    // 表示中のテキストの「先頭の1文字」のみをチェックして削除する
-    private void TryRemoveCharFromTexts(char c)
-    {
-        // まず EnglishText の先頭文字を優先してチェック
-        if (!string.IsNullOrEmpty(EnglishText.text))
-        {
-            char first = EnglishText.text[0];
-            if (char.ToLowerInvariant(first) == char.ToLowerInvariant(c))
-            {
-                EnglishText.text = EnglishText.text.Remove(0, 1);
-            }
-        }
     }
 
     private void OnSelect()
@@ -115,6 +110,6 @@ public class TypingWindowManager : MonoBehaviour
         int rand = Random.Range(0, _selectedIndex);
         // 生成されたランダムな整数を使用して、配列から要素を取得
         JapaneseText.text = _yells.YellTextDataArray[rand].JapaneseText;
-        EnglishText.text = _yells.YellTextDataArray[rand].EnglishText;
+        EnglishText.text = _yells.YellTextDataArray[rand].EnglishText.ToUpper();
     }
 }
