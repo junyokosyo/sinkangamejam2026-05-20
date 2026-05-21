@@ -18,8 +18,10 @@ public class InGameManager : MonoBehaviour
     [SerializeField] private QTEManager qTEManager;
     [SerializeField] private BackgroundLooper backGroundMover;
     [SerializeField] private EnemySpawner enemySpawner;
+    [SerializeField] private PlayerController player;
 
     public static event Action OnStart;
+    public static event Action OnClear;
 
     private bool _hasReachedGoal;
     private float currentVelocity;
@@ -45,8 +47,10 @@ public class InGameManager : MonoBehaviour
 
     private void SpeedUp(bool isMistaken)
     {
-        currentVelocity += additiveSpeed * (isMistaken ? 1 : noMistakeMultiply);
+        var value = additiveSpeed * (isMistaken ? 1 : noMistakeMultiply);
+        currentVelocity += value;
         qTEManager.successCount++;
+        player.PlayerSpeed *= 1.1f;
         SetSpeed(currentVelocity);
     }
 
@@ -54,6 +58,7 @@ public class InGameManager : MonoBehaviour
     {
         if (!isSucceed)
         {
+            player.PlayerSpeed = 1f;
             currentVelocity = defaultMoveSpeed;
             SetSpeed(currentVelocity);
         }

@@ -11,6 +11,7 @@ public class GameUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI countDownText;
     [SerializeField] private TextMeshProUGUI distanceText;
     [SerializeField] private TMP_Text velocityText;
+    [SerializeField] private TMP_Text timerText;
 
     [Header("Player")] 
     [SerializeField] private Transform player;
@@ -24,6 +25,8 @@ public class GameUI : MonoBehaviour
 
     private void Start()
     {
+        timerText.text = $"タイム:{scoreTimer:F2}s";
+        UpdateDistanceText();
         StartCoroutine(CountDown());
     }
 
@@ -32,12 +35,7 @@ public class GameUI : MonoBehaviour
         // カウント中は動かない
         if (!gameStart) return;
 
-        float remainDistance =
-            goalPos.position.x - player.position.x;
-
-        remainDistance = Mathf.Max(0, remainDistance);
-
-        distanceText.text = $"ゴールまで あと {remainDistance:F1} m";
+        var remainDistance = UpdateDistanceText();
 
         // ゴール
         if (remainDistance <= 0)
@@ -51,6 +49,17 @@ public class GameUI : MonoBehaviour
         {
             ScoreTimer();
         }
+    }
+
+    private float UpdateDistanceText()
+    {
+        float remainDistance =
+            goalPos.position.x - player.position.x;
+
+        remainDistance = Mathf.Max(0, remainDistance);
+
+        distanceText.text = $"おうちまで あと {remainDistance:F1}m";
+        return remainDistance;
     }
 
     private IEnumerator CountDown()
@@ -79,10 +88,11 @@ public class GameUI : MonoBehaviour
     private void ScoreTimer()
     {
         scoreTimer += Time.deltaTime;
+        timerText.text = $"タイム:{scoreTimer:F2}s";
     }
 
     public void UpdateVelocityText(float velocity)
     {
-        velocityText.text = velocity.ToString("F1") + " m/s";
+        velocityText.text = $"はやさ:{velocity:F1} m/s";
     }
 }
