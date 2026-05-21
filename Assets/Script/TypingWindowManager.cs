@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -9,20 +10,17 @@ using Random = UnityEngine.Random;
 
 public class TypingWindowManager : MonoBehaviour
 {
-    [SerializeField]
-    private Yells _yells;
+    [SerializeField] private Yells _yells;
 
-    [SerializeField]
-    private TMP_Text JapaneseText;
+    [SerializeField] private TMP_Text JapaneseText;
 
-    [SerializeField]
-    private TMP_Text EnglishText;
-    
-    [SerializeField]
-    private Image _backgroundImage;
+    [SerializeField] private TMP_Text EnglishText;
 
-    [SerializeField]
-    private Color _firstCharColor = Color.yellow;
+    [SerializeField] private Image _backgroundImage;
+
+    [SerializeField] private TMP_Text _noMissText;
+
+    [SerializeField] private Color _firstCharColor = Color.yellow;
 
     private int _selectedIndex;
     private bool _isQTEActive;
@@ -34,6 +32,7 @@ public class TypingWindowManager : MonoBehaviour
     private void Start()
     {
         _backgroundImage.gameObject.SetActive(false);
+        _noMissText.gameObject.SetActive(false);
     }
 
     public void GameStart()
@@ -41,7 +40,7 @@ public class TypingWindowManager : MonoBehaviour
         _selectedIndex = _yells.YellTextDataArray.Length;
         _backgroundImage.gameObject.SetActive(true);
         OnSelect();
-        
+
         _inputSubscription = InputSystem.onAnyButtonPress.Call(OnAnyKeyPressed);
     }
 
@@ -92,16 +91,27 @@ public class TypingWindowManager : MonoBehaviour
                 AudioManager.Instance.PlaySE(SoundType.TypingSE);
             }
         }
-        
-        
+
+
         if (string.IsNullOrEmpty(currentText))
         {
             OnTypingComplete?.Invoke(_isMissing);
             AudioManager.Instance.PlaySE(SoundType.TypingSuccessSE);
             AudioManager.Instance.PlaySE(SoundType.YellSE);
+            if (!_isMissing)
+            {
+                StartCoroutine(NoMissText(0.5f));
+            }
 
             OnSelect();
         }
+    }
+
+    private IEnumerator NoMissText(float duration)
+    {
+        _noMissText.gameObject.SetActive(true);
+        yield return new WaitForSeconds(duration);
+        _noMissText.gameObject.SetActive(false);
     }
 
     // Key を対応する文字に変換する（簡易実装: 英数字とスペース）

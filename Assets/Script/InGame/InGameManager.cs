@@ -42,9 +42,25 @@ public class InGameManager : MonoBehaviour
         qTEManager.OnQTESwitched += typingWindowManager.SetQTE;
         qTEManager.OnQTEFinished += QTECheck;
         typingWindowManager.OnTypingComplete += SpeedUp;
+        player.OnDeath += StopGame;
         SetSpeed(currentVelocity);
         
         AudioManager.Instance.PlaySE(SoundType.InGameBGM);
+    }
+
+    private void StopGame()
+    {
+        currentVelocity = 0;
+        SetSpeed(currentVelocity);
+        gameUI.StopTimer();
+        
+        StartCoroutine(GameOver(2.5f));
+    }
+
+    private IEnumerator GameOver(float waitTime)
+    {
+        yield return new WaitForSeconds(waitTime);
+        SceneTransition.Instance.SceneLoad(SceneName.Gameover);
     }
 
     private void SpeedUp(bool isMistaken)
