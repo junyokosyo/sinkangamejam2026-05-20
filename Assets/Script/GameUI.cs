@@ -45,7 +45,7 @@ public class GameUI : MonoBehaviour
             gameStart = false;
             distanceText.text = "GOAL!";
             RankingManager.SaveRanking(scoreTimer);
-            // SceneTransition.Instance.SceneLoad(SceneName.Clear);
+            SceneTransition.Instance.SceneLoad(SceneName.Clear);
         }
         else
         {
@@ -55,14 +55,16 @@ public class GameUI : MonoBehaviour
 
     private IEnumerator CountDown()
     {
+        countDownText.enabled = false;
         // 開幕フェード分のバッファ
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1f);
+        countDownText.enabled = true;
 
         int startCount = 3;
-        while (startCount-- > 1)
+        while (startCount-- > 0)
         {
-            countDownText.text = startCount.ToString();
             yield return new WaitForSeconds(1);
+            countDownText.text = startCount.ToString();
         }
 
         countDownText.text = "START!";
@@ -81,6 +83,6 @@ public class GameUI : MonoBehaviour
 
     public void UpdateVelocityText(float velocity)
     {
-        velocityText.text = velocity.ToString("F1") + " km/s";
+        velocityText.text = velocity.ToString("F1") + " km/h";
     }
 }
