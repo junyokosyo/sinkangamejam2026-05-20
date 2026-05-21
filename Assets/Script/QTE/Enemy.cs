@@ -37,9 +37,4 @@ public class Enemy : MonoBehaviour
             qteManager.StartQTE();
         }
     }
-
-    // Triggerに入った瞬間
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-    }
 }

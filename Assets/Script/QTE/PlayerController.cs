@@ -81,6 +81,11 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("IsJumping", true);
     }
 
+    public void Clear()
+    {
+        animator.SetBool("IsCleared", true);
+    }
+
     // ダメージ処理
     public void TakeDamage(int damage)
     {

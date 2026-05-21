@@ -4,14 +4,12 @@ using UnityEngine;
 
 public class InGameManager : MonoBehaviour
 {
-    [Header("Parameter")]
-    [SerializeField] private float totalDistance;
+    [Header("Parameter")] [SerializeField] private float totalDistance;
     [SerializeField] private float defaultMoveSpeed;
     [SerializeField] private float additiveSpeed = 5f;
     [SerializeField] private float noMistakeMultiply = 1.1f;
-    
-    [Header("Binding")]
-    [SerializeField] private Transform playerTransform;
+
+    [Header("Binding")] [SerializeField] private Transform playerTransform;
     [SerializeField] private Transform goalPosition;
     [SerializeField] private GameUI gameUI;
     [SerializeField] private TypingWindowManager typingWindowManager;
@@ -21,7 +19,6 @@ public class InGameManager : MonoBehaviour
     [SerializeField] private PlayerController player;
 
     public static event Action OnStart;
-    public static event Action OnClear;
 
     private bool _hasReachedGoal;
     private float currentVelocity;
@@ -42,25 +39,45 @@ public class InGameManager : MonoBehaviour
         qTEManager.OnQTESwitched += typingWindowManager.SetQTE;
         qTEManager.OnQTEFinished += QTECheck;
         typingWindowManager.OnTypingComplete += SpeedUp;
-        player.OnDeath += StopGame;
+        player.OnDeath += () => StopGame(false);
+        gameUI.OnClear += () => StopGame(true);
         SetSpeed(currentVelocity);
-        
-        AudioManager.Instance.PlaySE(SoundType.InGameBGM);
+
+        AudioManager.Instance.PlayBGM(SoundType.InGameBGM);
     }
 
-    private void StopGame()
+    private void StopGame(bool isCleared)
     {
         currentVelocity = 0;
         SetSpeed(currentVelocity);
         gameUI.StopTimer();
-        
-        StartCoroutine(GameOver(2.5f));
+
+        if (isCleared)
+        {
+            StartCoroutine(Clear(2.5f));
+        }
+        else
+        {
+            StartCoroutine(GameOver(2.5f));
+        }
     }
 
     private IEnumerator GameOver(float waitTime)
     {
         yield return new WaitForSeconds(waitTime);
+        AudioManager.Instance.StopBGM();
         SceneTransition.Instance.SceneLoad(SceneName.Gameover);
+    }
+
+    private IEnumerator Clear(float waitTime)
+    {
+        AudioManager.Instance.PlaySE(SoundType.ResultClearSE);
+        player.Clear();
+        gameUI.Clear();
+        typingWindowManager.Clear();
+        yield return new WaitForSeconds(waitTime);
+        AudioManager.Instance.StopBGM();
+        SceneTransition.Instance.SceneLoad(SceneName.Clear);
     }
 
     private void SpeedUp(bool isMistaken)
@@ -95,11 +112,18 @@ public class InGameManager : MonoBehaviour
         while (!_hasReachedGoal)
         {
             yield return null;
-            goalPosition.position = Vector3.MoveTowards(
-                goalPosition.position,
-                playerTransform.position,
-                currentVelocity * Time.deltaTime
-            );
+            // X軸のみをターゲットに移動させる
+            var pos = goalPosition.position;
+            float targetX = playerTransform.position.x;
+            float newX = Mathf.MoveTowards(pos.x, targetX, currentVelocity * Time.deltaTime);
+            pos.x = newX;
+            goalPosition.position = pos;
+
+            // 目標に到達したらループを抜ける
+            if (Mathf.Approximately(newX, targetX))
+            {
+                _hasReachedGoal = true;
+            }
             gameUI.UpdateVelocityText(currentVelocity);
         }
     }

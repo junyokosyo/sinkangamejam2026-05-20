@@ -151,7 +151,7 @@ MonoBehaviour:
   qteKey: 26
   timeLimit: 2
   timeLimitDecreasePerSuccess: 0.1
-  timeLimitMin: 0.2
+  timeLimitMin: 0.35
   slowMotionScale: 0.02
   player: {fileID: 2049429090}
   canvasGroup: {fileID: 1633504627}
@@ -382,10 +382,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 262dc2b509d181e45924039c868a43db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  totalDistance: 2000
+  totalDistance: 1500
   defaultMoveSpeed: 5
-  additiveSpeed: 2
-  noMistakeMultiply: 1.3
+  additiveSpeed: 3
+  noMistakeMultiply: 1.5
   playerTransform: {fileID: 2049429091}
   goalPosition: {fileID: 1667320092}
   gameUI: {fileID: 1122074845}
@@ -1554,9 +1554,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '3
-
-'
+  m_text: GOAL!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7ea3e86498702d942adedde1c24db89b, type: 2}
   m_sharedMaterial: {fileID: 2822853075261635362, guid: 7ea3e86498702d942adedde1c24db89b, type: 2}
@@ -2110,7 +2108,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: adc4f168c1f45894b8045684cb112dbf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _yells: {fileID: 11400000, guid: 9ca527c20946a9d41a938f601cbdb738, type: 2}
+  _yells: {fileID: 11400000, guid: 493ec281d1dbcdf4ca4c96151b330c64, type: 2}
   JapaneseText: {fileID: 1501966454}
   EnglishText: {fileID: 2046849929}
   _backgroundImage: {fileID: 415107101}
@@ -2337,7 +2335,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 3
   m_Sprite: {fileID: -1021212030, guid: 98f7b2ab72126f044b2da2e5cd2e43af, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

@@ -1,9 +1,7 @@
 using System;
 using System.Collections;
-using System.Text;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class GameUI : MonoBehaviour
 {
@@ -15,15 +13,14 @@ public class GameUI : MonoBehaviour
     [SerializeField] private TMP_Text addSpeedText;
 
     [Header("Player")] [SerializeField] private Transform player;
-
     [Header("Goal")] [SerializeField] private Transform goalPos;
-    
-    [SerializeField]
-    private AnimationCurve curve;
+
+    [SerializeField] private AnimationCurve curve;
 
     private bool gameStart;
     private float scoreTimer;
     public event Action OnCountDownComplete;
+    public event Action OnClear;
 
     private void Start()
     {
@@ -35,6 +32,31 @@ public class GameUI : MonoBehaviour
     public void StopTimer()
     {
         gameStart = false;
+    }
+
+    public void Clear()
+    {
+        countDownText.enabled = true;
+        countDownText.text = "GOAL!";
+        StartCoroutine(MoveX(10, 1900, -1900));
+    }
+
+    private IEnumerator MoveX(float duration, float from, float to)
+    {
+        Vector3 startPos = countDownText.transform.position;
+        startPos.x = from;
+        Vector3 endPos = new Vector3(to, startPos.y, startPos.z);
+
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            var t = curve.Evaluate(elapsed / duration);
+            countDownText.transform.position = Vector3.Lerp(startPos, endPos, t);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        countDownText.transform.position = endPos;
     }
 
     private void Update()
@@ -50,7 +72,7 @@ public class GameUI : MonoBehaviour
             gameStart = false;
             distanceText.text = "GOAL!";
             RankingManager.SaveRanking(scoreTimer);
-            SceneTransition.Instance.SceneLoad(SceneName.Clear);
+            OnClear?.Invoke();
         }
         else
         {
@@ -104,10 +126,10 @@ public class GameUI : MonoBehaviour
         AudioManager.Instance.PlaySE(SoundType.CountDownSE);
 
         int startCount = 3;
+        countDownText.text = startCount.ToString();
         while (startCount-- > 0)
         {
             yield return new WaitForSeconds(1);
-
             countDownText.text = startCount.ToString();
         }
 
