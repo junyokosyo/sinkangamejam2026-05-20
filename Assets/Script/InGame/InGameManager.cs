@@ -43,12 +43,15 @@ public class InGameManager : MonoBehaviour
         qTEManager.OnQTEFinished += QTECheck;
         typingWindowManager.OnTypingComplete += SpeedUp;
         SetSpeed(currentVelocity);
+        
+        AudioManager.Instance.PlaySE(SoundType.InGameBGM);
     }
 
     private void SpeedUp(bool isMistaken)
     {
         var value = additiveSpeed * (isMistaken ? 1 : noMistakeMultiply);
         currentVelocity += value;
+        gameUI.AddSpeedText(value);
         qTEManager.successCount++;
         player.PlayerSpeed *= 1.1f;
         SetSpeed(currentVelocity);

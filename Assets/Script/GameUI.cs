@@ -7,17 +7,19 @@ using UnityEngine.SceneManagement;
 
 public class GameUI : MonoBehaviour
 {
-    [Header("UI")]
-    [SerializeField] private TextMeshProUGUI countDownText;
+    [Header("UI")] [SerializeField] private TextMeshProUGUI countDownText;
     [SerializeField] private TextMeshProUGUI distanceText;
     [SerializeField] private TMP_Text velocityText;
     [SerializeField] private TMP_Text timerText;
+    [SerializeField] private Transform addSpeedTextPos;
+    [SerializeField] private TMP_Text addSpeedText;
 
-    [Header("Player")] 
-    [SerializeField] private Transform player;
+    [Header("Player")] [SerializeField] private Transform player;
 
-    [Header("Goal")]
-    [SerializeField] private Transform goalPos;
+    [Header("Goal")] [SerializeField] private Transform goalPos;
+    
+    [SerializeField]
+    private AnimationCurve curve;
 
     private bool gameStart;
     private float scoreTimer;
@@ -51,6 +53,32 @@ public class GameUI : MonoBehaviour
         }
     }
 
+    public void AddSpeedText(float amount)
+    {
+        var text = Instantiate(addSpeedText, addSpeedTextPos.position, Quaternion.identity, addSpeedTextPos);
+        text.SetText($"+{amount:F2}m/s");
+        StartCoroutine(MoveAndDestroy(text, 100, 1));
+    }
+
+    private IEnumerator MoveAndDestroy(TMP_Text text, float distance, float duration)
+    {
+        Vector3 startPos = text.transform.position;
+        Vector3 endPos = startPos + Vector3.up * distance;
+        Color startColor = text.color;
+
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            var t = curve.Evaluate(elapsed / duration);
+            text.transform.position = Vector3.Lerp(startPos, endPos, t);
+            text.color = new Color(startColor.r, startColor.g, startColor.b, 1 - t);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        Destroy(text.gameObject);
+    }
+
     private float UpdateDistanceText()
     {
         float remainDistance =
@@ -68,16 +96,18 @@ public class GameUI : MonoBehaviour
         // 開幕フェード分のバッファ
         yield return new WaitForSeconds(1f);
         countDownText.enabled = true;
+        AudioManager.Instance.PlaySE(SoundType.CountDownSE);
 
         int startCount = 3;
         while (startCount-- > 0)
         {
             yield return new WaitForSeconds(1);
+
             countDownText.text = startCount.ToString();
         }
 
         countDownText.text = "START!";
-        
+
         yield return new WaitForSeconds(1);
         OnCountDownComplete?.Invoke();
 

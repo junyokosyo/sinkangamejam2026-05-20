@@ -35,7 +35,8 @@ public class QTEManager : MonoBehaviour
 
     public int successCount;
 
-    private Coroutine coroutine;
+    private Coroutine _coroutine;
+    private IDisposable _inputSubscription;
 
     private void Start()
     {
@@ -43,7 +44,12 @@ public class QTEManager : MonoBehaviour
         canvasGroup.alpha = 0f;
         canvasGroup.gameObject.SetActive(false);
         
-        InputSystem.onAnyButtonPress.Call(OnAnyKeyPressed);
+        _inputSubscription = InputSystem.onAnyButtonPress.Call(OnAnyKeyPressed);
+    }
+
+    private void OnDestroy()
+    {
+        _inputSubscription?.Dispose();
     }
 
     private void OnAnyKeyPressed(InputControl control)
@@ -92,10 +98,11 @@ public class QTEManager : MonoBehaviour
         // PUSH L 表示
         if (canvasGroup != null)
         {
-            coroutine = StartCoroutine(SlowMoPanelFade(0.1f));
+            _coroutine = StartCoroutine(SlowMoPanelFade(0.1f));
         }
 
         Debug.Log("QTE開始");
+        AudioManager.Instance.PlaySE(SoundType.QteWarningSE);
         OnQTESwitched?.Invoke(true);
     }
 
@@ -143,6 +150,8 @@ public class QTEManager : MonoBehaviour
         player.TakeDamage(1);
         successCount = 0;
         OnQTEFinished?.Invoke(false);
+        
+        AudioManager.Instance.PlaySE(SoundType.CarCrashSE);
 
         QTEFinish();
     }
@@ -158,9 +167,9 @@ public class QTEManager : MonoBehaviour
         // PUSH L 非表示
         if (canvasGroup != null)
         {
-            if (coroutine != null)
+            if (_coroutine != null)
             {
-                StopCoroutine(coroutine);
+                StopCoroutine(_coroutine);
             }
 
             canvasGroup.alpha = 0f;

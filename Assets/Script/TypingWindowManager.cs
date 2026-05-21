@@ -29,6 +29,7 @@ public class TypingWindowManager : MonoBehaviour
     private bool _isMissing;
     private string currentText;
     public event Action<bool> OnTypingComplete;
+    private IDisposable _inputSubscription;
 
     private void Start()
     {
@@ -41,7 +42,12 @@ public class TypingWindowManager : MonoBehaviour
         _backgroundImage.gameObject.SetActive(true);
         OnSelect();
         
-        InputSystem.onAnyButtonPress.Call(OnAnyKeyPressed);
+        _inputSubscription = InputSystem.onAnyButtonPress.Call(OnAnyKeyPressed);
+    }
+
+    private void OnDestroy()
+    {
+        _inputSubscription?.Dispose();
     }
 
     public void SetQTE(bool isActive)
@@ -69,6 +75,8 @@ public class TypingWindowManager : MonoBehaviour
         // 不一致でミス扱い
         if (keyChar != currentText[0])
         {
+            Debug.Log(keyChar);
+            AudioManager.Instance.PlaySE(SoundType.TypingMissSE);
             _isMissing = true;
             return;
         }
@@ -81,6 +89,7 @@ public class TypingWindowManager : MonoBehaviour
                 var newMsg = currentText[1..];
                 UpdateText(newMsg);
                 currentText = newMsg;
+                AudioManager.Instance.PlaySE(SoundType.TypingSE);
             }
         }
         
@@ -88,6 +97,8 @@ public class TypingWindowManager : MonoBehaviour
         if (string.IsNullOrEmpty(currentText))
         {
             OnTypingComplete?.Invoke(_isMissing);
+            AudioManager.Instance.PlaySE(SoundType.TypingSuccessSE);
+            AudioManager.Instance.PlaySE(SoundType.YellSE);
 
             OnSelect();
         }
@@ -97,11 +108,19 @@ public class TypingWindowManager : MonoBehaviour
     private bool TryKeyToChar(Key key, out char result)
     {
         result = '\0';
-        // A-Z
+
+        // A-Z のみ対応（大文字）
         if (key >= Key.A && key <= Key.Z)
         {
             int offset = key - Key.A;
-            result =(char)('A' + offset);
+            result = (char)('A' + offset);
+            return true;
+        }
+
+        // ハイフン（マイナス）キーのみ対応
+        if (key == Key.Minus)
+        {
+            result = '-';
             return true;
         }
 

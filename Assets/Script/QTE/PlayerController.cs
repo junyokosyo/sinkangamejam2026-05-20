@@ -69,6 +69,8 @@ public class PlayerController : MonoBehaviour
         rb.AddForce(
             Vector2.up * jumpPower,
             ForceMode2D.Impulse);
+        
+        AudioManager.Instance.PlaySE(SoundType.JunpSE);
 
         animator.SetBool("IsJumping", true);
     }
