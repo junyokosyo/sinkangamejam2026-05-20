@@ -12,6 +12,7 @@ public class AudioManager : MonoBehaviour
 
     private readonly Dictionary<SoundType, SoundData> soundDict = new();
 
+    
     private void Awake()
     {
         if (Instance == null)
@@ -55,7 +56,10 @@ public class AudioManager : MonoBehaviour
 
         seSource.pitch = 1f;
     }
-
+    public void PlayUISlectSE()
+    {
+        PlaySE(SoundType.UISelectSE);
+    }
     // =========================
     // BGM
     // =========================
