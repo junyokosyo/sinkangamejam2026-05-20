@@ -8,10 +8,9 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioSource seSource;
     [SerializeField] private AudioSource bgmSource;
 
-    [SerializeField] private List<SoundData> soundList;
+    [SerializeField] private SoundDataBase soundDataBase;
 
-    private Dictionary<SoundType, SoundData> soundDict
-        = new();
+    private readonly Dictionary<SoundType, SoundData> soundDict = new();
 
     private void Awake()
     {
@@ -20,18 +19,16 @@ public class AudioManager : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(gameObject);
 
-            foreach (var sound in soundList)
+            foreach (var sound in soundDataBase.soundDataArray)
             {
-                if (soundDict.ContainsKey(sound.type))
+                if (!soundDict.TryAdd(sound.type, sound))
                 {
                     Debug.LogWarning(
-                        $"{sound.type} ‚ÍŠù‚É“o˜^‚³‚ê‚Ä‚¢‚Ü‚·"
+                        $"{sound.type} ï¿½ÍŠï¿½ï¿½É“oï¿½^ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½"
                     );
 
                     continue;
                 }
-
-                soundDict.Add(sound.type, sound);
             }
         }
         else

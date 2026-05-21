@@ -48,7 +48,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   seSource: {fileID: 4782601134216035241}
   bgmSource: {fileID: 1347210392858296379}
-  soundList: []
+  soundList:
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!1 &5812148880167819977
 GameObject:
   m_ObjectHideFlags: 0
