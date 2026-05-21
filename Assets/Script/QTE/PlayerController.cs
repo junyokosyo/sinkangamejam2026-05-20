@@ -1,36 +1,35 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
     private Rigidbody2D rb;
-    
-    [SerializeField]
-    private SpriteRenderer sr;
+
+    [SerializeField] private SpriteRenderer sr;
 
     [SerializeField] private Animator animator;
 
-    [Header("ジャンプ設定")]
-    public float jumpPower = 20f;
+    [Header("ジャンプ設定")] public float jumpPower = 20f;
 
     public float fallMultiplier = 3f;
 
-    [Header("HP設定")]
-    public int hp = 3;
+    [Header("HP設定")] public int hp = 3;
 
-    [Header("死亡状態")]
-    public bool isDead;
+    [Header("死亡状態")] public bool isDead;
 
-    [Header("無敵設定")]
-    public bool isInvincible;
+    [Header("無敵設定")] public bool isInvincible;
 
     public float invincibleTime = 1.5f;
 
-    [Header("UI")]
-    public GameObject damageText;
+    [Header("UI")] public GameObject damageText;
 
     public GameObject gameOverText;
+    [SerializeField] private Transform lifeUI;
+    [SerializeField] private Image heartImage;
+
+    public Action OnDeath;
 
     public float PlayerSpeed
     {
@@ -40,6 +39,13 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
+        for (int i = 0; i < hp; i++)
+        {
+            Image heart = Instantiate(heartImage, lifeUI);
+            heart.gameObject.SetActive(true);
+        }
+        
+        Destroy(heartImage.gameObject);
         rb = GetComponent<Rigidbody2D>();
     }
 
@@ -69,7 +75,7 @@ public class PlayerController : MonoBehaviour
         rb.AddForce(
             Vector2.up * jumpPower,
             ForceMode2D.Impulse);
-        
+
         AudioManager.Instance.PlaySE(SoundType.JunpSE);
 
         animator.SetBool("IsJumping", true);
@@ -83,6 +89,7 @@ public class PlayerController : MonoBehaviour
 
         hp -= damage;
         animator.speed = 1;
+        Destroy(lifeUI.GetChild(0).gameObject);
 
         Debug.Log("ダメージ！ HP : " + hp);
 
@@ -108,8 +115,9 @@ public class PlayerController : MonoBehaviour
     private IEnumerator GameOverDelay()
     {
         // 「痛い！」が消えるまで待つ
-        yield return new WaitForSecondsRealtime(1f);
+        yield return new WaitForSecondsRealtime(0.2f);
 
+        AudioManager.Instance.StopBGM();
         GameOver();
     }
 
@@ -117,19 +125,11 @@ public class PlayerController : MonoBehaviour
     private void GameOver()
     {
         isDead = true;
+        
+        animator.SetBool("IsDead", true);
 
         Debug.Log("土に還る");
-
-        // 土に還る表示
-        if (gameOverText != null)
-        {
-            gameOverText.SetActive(true);
-        }
-
-        // 45度傾ける
-        transform.rotation =
-            Quaternion.Euler(0, 0, 45);
-
+        OnDeath?.Invoke();
         // プレイヤー停止
         rb.linearVelocity = Vector2.zero;
 

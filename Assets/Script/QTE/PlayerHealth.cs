@@ -1,9 +1,11 @@
+using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerHealth : MonoBehaviour
 {
-    [SerializeField] private Transform lifeUI;
     public int health = 3;
+
 
     private void OnCollisionEnter(Collision collision)
     {

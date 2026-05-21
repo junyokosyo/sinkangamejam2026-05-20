@@ -32,6 +32,11 @@ public class GameUI : MonoBehaviour
         StartCoroutine(CountDown());
     }
 
+    public void StopTimer()
+    {
+        gameStart = false;
+    }
+
     private void Update()
     {
         // カウント中は動かない
