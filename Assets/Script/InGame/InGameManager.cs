@@ -46,6 +46,7 @@ public class InGameManager : MonoBehaviour
     private void SpeedUp(bool isMistaken)
     {
         currentVelocity += additiveSpeed * (isMistaken ? 1 : noMistakeMultiply);
+        qTEManager.successCount++;
         SetSpeed(currentVelocity);
     }
 
@@ -62,7 +63,7 @@ public class InGameManager : MonoBehaviour
     {
         backGroundMover.SetSpeed(speed);
         gameUI.UpdateVelocityText(speed);
-        enemySpawner.SetEnemySpeed(speed);
+        enemySpawner.SetEnemySpeed(speed * 1.5f);
     }
 
     private IEnumerator MoveGoalPosition()

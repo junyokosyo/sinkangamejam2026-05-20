@@ -18,7 +18,7 @@ public class Enemy : MonoBehaviour
     // QTE重複防止
     private bool hasStartedQTE;
 
-    void Update()
+    private void Update()
     {
         // 一回だけQTE開始
         if (hasStartedQTE) return;
@@ -41,28 +41,5 @@ public class Enemy : MonoBehaviour
     // Triggerに入った瞬間
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        // QTE成功してたら何もしない
-        if (hasQTESucceed)
-        {
-            return;
-        }
-        // Playerに当たった
-        if (collision.CompareTag("Player"))
-        {
-            PlayerController playerController =
-                collision.GetComponent<PlayerController>();
-
-            // ダメージ
-            if (playerController != null)
-            {
-                playerController.TakeDamage(damage);
-            }
-        }
-
-        // Wallに当たった
-        if (collision.CompareTag("Wall"))
-        {
-            Destroy(gameObject);
-        }
     }
 }

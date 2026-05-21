@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,6 +9,11 @@ public class QTEManager : MonoBehaviour
     public KeyCode qteKey = KeyCode.L;
 
     public float timeLimit = 3f;
+    
+    [SerializeField]
+    private float timeLimitDecreasePerSuccess = 0.05f;
+
+    [SerializeField] private float timeLimitMin = 0.2f;
 
     [Range(0f, 1f)]
     public float slowMotionScale = 0.05f;
@@ -21,12 +27,19 @@ public class QTEManager : MonoBehaviour
 
     // PUSH L UI
     public GameObject qteText;
-    [SerializeField] private Image qteTimeLimitImage;
+    [SerializeField] private TMP_Text qteTimeLimit;
 
     // 回避成功 UI
     public GameObject successText;
     public event Action<bool> OnQTESwitched;
     public event Action<bool> OnQTEFinished;
+    
+    public int successCount;
+
+    private void Start()
+    {
+        qteText.SetActive(false);
+    }
 
     private void Update()
     {
@@ -34,7 +47,7 @@ public class QTEManager : MonoBehaviour
 
         // スロー中でも時間を進める
         timer -= Time.unscaledDeltaTime;
-        qteTimeLimitImage.fillAmount = timer / timeLimit;
+        qteTimeLimit.text = $"{timer:F2}s";
 
         // Lキー入力
         if (Input.GetKeyDown(qteKey))
@@ -55,7 +68,8 @@ public class QTEManager : MonoBehaviour
         // 二重起動防止
         if (isQTEActive) return;
 
-        timer = timeLimit;
+        timer = Mathf.Max(timeLimitMin, timeLimit - successCount * timeLimitDecreasePerSuccess);
+        Debug.Log(timer);
 
         isQTEActive = true;
 
@@ -109,6 +123,8 @@ public class QTEManager : MonoBehaviour
     private void Fail()
     {
         isQTEActive = false;
+        successCount = 0;
+        player.TakeDamage(1);
 
         // 時間を戻す
         Time.timeScale = 1f;
