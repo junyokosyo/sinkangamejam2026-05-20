@@ -21,9 +21,13 @@ public class TypingWindowManager : MonoBehaviour
     [SerializeField]
     private Image _backgroundImage;
 
+    [SerializeField]
+    private Color _firstCharColor = Color.yellow;
+
     private int _selectedIndex;
     private bool _isQTEActive;
     private bool _isMissing;
+    private string currentText;
     public event Action<bool> OnTypingComplete;
 
     private void Start()
@@ -36,7 +40,7 @@ public class TypingWindowManager : MonoBehaviour
         _selectedIndex = _yells.YellTextDataArray.Length;
         _backgroundImage.gameObject.SetActive(true);
         OnSelect();
-
+        
         InputSystem.onAnyButtonPress.Call(OnAnyKeyPressed);
     }
 
@@ -63,23 +67,25 @@ public class TypingWindowManager : MonoBehaviour
     private void CheckInputKey(char keyChar)
     {
         // 不一致でミス扱い
-        if (keyChar != EnglishText.text[0])
+        if (keyChar != currentText[0])
         {
             _isMissing = true;
             return;
         }
 
-        if (!string.IsNullOrEmpty(EnglishText.text))
+        if (!string.IsNullOrEmpty(currentText))
         {
-            char first = EnglishText.text[0];
+            char first = currentText[0];
             if (char.ToUpperInvariant(first) == char.ToUpperInvariant(keyChar))
             {
-                EnglishText.text = EnglishText.text.Remove(0, 1);
+                var newMsg = currentText[1..];
+                UpdateText(newMsg);
+                currentText = newMsg;
             }
         }
         
         
-        if (string.IsNullOrEmpty(EnglishText.text))
+        if (string.IsNullOrEmpty(currentText))
         {
             OnTypingComplete?.Invoke(_isMissing);
 
@@ -110,6 +116,22 @@ public class TypingWindowManager : MonoBehaviour
         int rand = Random.Range(0, _selectedIndex);
         // 生成されたランダムな整数を使用して、配列から要素を取得
         JapaneseText.text = _yells.YellTextDataArray[rand].JapaneseText;
-        EnglishText.text = _yells.YellTextDataArray[rand].EnglishText.ToUpper();
+        currentText = _yells.YellTextDataArray[rand].EnglishText.ToUpper();
+        UpdateText(currentText);
+    }
+
+    private void UpdateText(string msg)
+    {
+        // 一文字目だけ色を変える
+        if (msg.Length > 0)
+        {
+            string colorHex = ColorUtility.ToHtmlStringRGB(_firstCharColor);
+            string coloredMsg = $"<color=#{colorHex}>{msg[0]}</color>{msg[1..]}";
+            EnglishText.text = coloredMsg;
+        }
+        else
+        {
+            EnglishText.text = msg;
+        }
     }
 }

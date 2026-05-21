@@ -126,7 +126,7 @@ public class QTEManager : MonoBehaviour
         {
             successText.SetActive(true);
 
-            Invoke(nameof(HideSuccessText), 1f);
+            StartCoroutine(HideSuccessText(1f));
         }
 
         if (player != null)
@@ -169,8 +169,9 @@ public class QTEManager : MonoBehaviour
     }
 
     // 回避成功UIを消す
-    private void HideSuccessText()
+    private IEnumerator HideSuccessText(float wait)
     {
+        yield return new WaitForSeconds(wait);
         if (successText != null)
         {
             successText.SetActive(false);
