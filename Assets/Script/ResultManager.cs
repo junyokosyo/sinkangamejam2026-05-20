@@ -7,6 +7,7 @@ public class ResultManager : MonoBehaviour
 
     void Start()
     {
+        AudioManager.Instance.StopBGM();
         AudioManager.Instance.PlayBGM(SoundType.ClearBGM);
         titleButton.onClick.AddListener(OnTitle);
         titleButton.onClick.AddListener(() => AudioManager.Instance.PlaySE(SoundType.UISelectSE));
