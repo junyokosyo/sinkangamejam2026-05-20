@@ -32,6 +32,12 @@ public class PlayerController : MonoBehaviour
 
     public GameObject gameOverText;
 
+    public float PlayerSpeed
+    {
+        get => animator.speed;
+        set => animator.speed = value;
+    }
+
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -74,6 +80,7 @@ public class PlayerController : MonoBehaviour
         if (isInvincible || isDead) return;
 
         hp -= damage;
+        animator.speed = 1;
 
         Debug.Log("ダメージ！ HP : " + hp);
 
