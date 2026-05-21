@@ -1,44 +1,43 @@
 using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class QTEManager : MonoBehaviour
 {
-    [Header("QTE設定")]
-    public KeyCode qteKey = KeyCode.L;
+    [Header("QTE設定")] public KeyCode qteKey = KeyCode.L;
 
     public float timeLimit = 3f;
-    
-    [SerializeField]
-    private float timeLimitDecreasePerSuccess = 0.05f;
+
+    [SerializeField] private float timeLimitDecreasePerSuccess = 0.05f;
 
     [SerializeField] private float timeLimitMin = 0.2f;
 
-    [Range(0f, 1f)]
-    public float slowMotionScale = 0.05f;
+    [Range(0f, 1f)] public float slowMotionScale = 0.05f;
 
     private float timer;
 
     private bool isQTEActive;
 
-    [Header("参照")]
-    public PlayerController player;
+    [Header("参照")] public PlayerController player;
 
     // PUSH L UI
-    public GameObject qteText;
+    [SerializeField] private CanvasGroup canvasGroup;
     [SerializeField] private TMP_Text qteTimeLimit;
 
     // 回避成功 UI
     public GameObject successText;
     public event Action<bool> OnQTESwitched;
     public event Action<bool> OnQTEFinished;
-    
+
     public int successCount;
 
     private void Start()
     {
-        qteText.SetActive(false);
+        canvasGroup.blocksRaycasts = false;
+        canvasGroup.alpha = 0f;
+        canvasGroup.gameObject.SetActive(false);
     }
 
     private void Update()
@@ -77,13 +76,29 @@ public class QTEManager : MonoBehaviour
         Time.timeScale = slowMotionScale;
 
         // PUSH L 表示
-        if (qteText != null)
+        if (canvasGroup != null)
         {
-            qteText.SetActive(true);
+            StartCoroutine(SlowMoPanelFade(0.1f));
         }
 
         Debug.Log("QTE開始");
         OnQTESwitched?.Invoke(true);
+    }
+
+    private IEnumerator SlowMoPanelFade(float duration)
+    {
+        canvasGroup.gameObject.SetActive(true);
+        canvasGroup.alpha = 0f;
+        canvasGroup.blocksRaycasts = true;
+        var time = 0f;
+        while (time < duration)
+        {
+            time += Time.unscaledDeltaTime;
+            canvasGroup.alpha = time / duration;
+            yield return null;
+        }
+        canvasGroup.blocksRaycasts = false;
+        canvasGroup.alpha = 1f;
     }
 
     // 成功
@@ -95,9 +110,10 @@ public class QTEManager : MonoBehaviour
         Time.timeScale = 1f;
 
         // PUSH L 非表示
-        if (qteText != null)
+        if (canvasGroup != null)
         {
-            qteText.SetActive(false);
+            canvasGroup.alpha = 0f;
+            canvasGroup.blocksRaycasts = true;
         }
 
         // 回避成功表示
@@ -130,9 +146,10 @@ public class QTEManager : MonoBehaviour
         Time.timeScale = 1f;
 
         // PUSH L 非表示
-        if (qteText != null)
+        if (canvasGroup != null)
         {
-            qteText.SetActive(false);
+            canvasGroup.alpha = 0f;
+            canvasGroup.blocksRaycasts = true;
         }
 
         Debug.Log("QTE失敗");

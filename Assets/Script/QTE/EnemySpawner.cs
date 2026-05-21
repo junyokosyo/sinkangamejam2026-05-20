@@ -4,7 +4,9 @@ public class EnemySpawner : MonoBehaviour
 {
     [Header("生成するEnemy")] public GameObject enemyPrefab;
 
-    [Header("生成間隔")] public float spawnInterval = 5f;
+    [Header("生成間隔")]
+    [SerializeField] private float intervalMin = 3f;
+    [SerializeField] private float intervalMax = 3f;
 
     [Header("生成位置")] public Transform spawnPoint;
 
@@ -19,6 +21,7 @@ public class EnemySpawner : MonoBehaviour
     private float timer;
     private bool _isActive;
     private Enemy currentEnemy;
+    private float currentInterval;
 
     private void Start()
     {
@@ -59,7 +62,7 @@ public class EnemySpawner : MonoBehaviour
 
         timer += Time.deltaTime;
 
-        if (timer >= spawnInterval)
+        if (timer >= currentInterval)
         {
             SpawnEnemy();
 
@@ -89,7 +92,8 @@ public class EnemySpawner : MonoBehaviour
         
         move.speed = enemySpeed;
 
+        currentInterval = Random.Range(intervalMin, intervalMax);
 
-        Debug.Log("Enemy生成");
+        Debug.Log($"Enemy生成 {currentInterval:F2}秒後に次のEnemy生成");
     }
 }

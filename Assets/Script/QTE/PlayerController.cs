@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -7,6 +8,8 @@ public class PlayerController : MonoBehaviour
     
     [SerializeField]
     private SpriteRenderer sr;
+
+    [SerializeField] private Animator animator;
 
     [Header("ジャンプ設定")]
     public float jumpPower = 20f;
@@ -61,7 +64,7 @@ public class PlayerController : MonoBehaviour
             Vector2.up * jumpPower,
             ForceMode2D.Impulse);
 
-        Debug.Log("回避ジャンプ！");
+        animator.SetBool("IsJumping", true);
     }
 
     // ダメージ処理
@@ -159,5 +162,10 @@ public class PlayerController : MonoBehaviour
         {
             damageText.SetActive(false);
         }
+    }
+
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        animator.SetBool("IsJumping", false);
     }
 }

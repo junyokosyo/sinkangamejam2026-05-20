@@ -83,6 +83,6 @@ public class GameUI : MonoBehaviour
 
     public void UpdateVelocityText(float velocity)
     {
-        velocityText.text = velocity.ToString("F1") + " km/h";
+        velocityText.text = velocity.ToString("F1") + " m/s";
     }
 }
