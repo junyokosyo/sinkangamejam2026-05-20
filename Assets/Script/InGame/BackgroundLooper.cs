@@ -13,6 +13,12 @@ public class BackgroundLooper : MonoBehaviour
         width = bgA.GetComponent<SpriteRenderer>().bounds.size.x;
 
         bgA.position = Vector3.zero;
+
+        if (bgB == null)
+        {
+            bgB = Instantiate(bgA, bgA.position, Quaternion.identity, transform);
+        }
+
         bgB.position = new Vector3(width, 0, 0);
     }
 
