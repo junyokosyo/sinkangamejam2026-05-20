@@ -17,6 +17,7 @@ public class InGameManager : MonoBehaviour
     [SerializeField] private BackgroundLooper backGroundMover;
     [SerializeField] private EnemySpawner enemySpawner;
     [SerializeField] private PlayerController player;
+    [SerializeField] private SendYellAnimation sendYellAnimation;
 
     public static event Action OnStart;
 
@@ -87,6 +88,7 @@ public class InGameManager : MonoBehaviour
         gameUI.AddSpeedText(value);
         qTEManager.successCount++;
         player.PlayerSpeed *= 1.1f;
+        StartCoroutine(sendYellAnimation.PlayAnimation());
         SetSpeed(currentVelocity);
     }
 
