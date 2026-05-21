@@ -25,8 +25,8 @@ public class ResultUI : MonoBehaviour
             }
 
             rankingTexts[i].text =
-                "No."+(i + 1) + ": " +
-                time.ToString("F2");
+                "No."+(i + 1) + ": "+
+                time.ToString("F2") + "[s]";
         }
     }
 }
