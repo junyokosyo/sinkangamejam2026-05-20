@@ -1,28 +1,40 @@
-using System.Collections.Generic;
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
 using UnityEngine.InputSystem.Utilities;
+using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
-public class Theme : MonoBehaviour
+public class TypingWindowManager : MonoBehaviour
 {
     [SerializeField]
     private Yells _yells;
 
     [SerializeField]
-    private TextMeshPro JapaneseText;
+    private TMP_Text JapaneseText;
 
     [SerializeField]
-    private TextMeshPro EnglishText;
+    private TMP_Text EnglishText;
+    
+    [SerializeField]
+    private Image _backgroundImage;
 
     private int _selectedIndex;
-    private bool _isQTEActive = false;
-    private bool _isMissing = false;
+    private bool _isQTEActive;
+    private bool _isMissing;
+    public event Action<bool> OnTypingComplete;
 
-    void Start()
+    private void Start()
+    {
+        _backgroundImage.gameObject.SetActive(false);
+    }
+
+    public void GameStart()
     {
         _selectedIndex = _yells.YellTextDataArray.Length;
+        _backgroundImage.gameObject.SetActive(true);
         OnSelect();
 
         InputSystem.onAnyButtonPress.Call(OnAnyKeyPressed);
@@ -31,6 +43,7 @@ public class Theme : MonoBehaviour
     public void SetQTE(bool isActive)
     {
         _isQTEActive = isActive;
+        _backgroundImage.gameObject.SetActive(!isActive);
     }
 
     private void OnAnyKeyPressed(InputControl control)
@@ -49,24 +62,26 @@ public class Theme : MonoBehaviour
 
     private void CheckInputKey(char keyChar)
     {
-        // キーを文字に変換して、表示中テキストに含まれていればその文字を削除する
+        // 不一致でミス扱い
         if (keyChar != EnglishText.text[0])
         {
             _isMissing = true;
             return;
         }
 
-        TryRemoveCharFromTexts(keyChar);
-        if (EnglishText.text == "")
+        if (!string.IsNullOrEmpty(EnglishText.text))
         {
-            if (_isMissing)
+            char first = EnglishText.text[0];
+            if (char.ToUpperInvariant(first) == char.ToUpperInvariant(keyChar))
             {
-                Debug.Log("miss");
+                EnglishText.text = EnglishText.text.Remove(0, 1);
             }
-            else
-            {
-                Debug.Log("clear");
-            }
+        }
+        
+        
+        if (string.IsNullOrEmpty(EnglishText.text))
+        {
+            OnTypingComplete?.Invoke(_isMissing);
 
             OnSelect();
         }
@@ -80,26 +95,11 @@ public class Theme : MonoBehaviour
         if (key >= Key.A && key <= Key.Z)
         {
             int offset = key - Key.A;
-            result =(char)('a' + offset);
+            result =(char)('A' + offset);
             return true;
         }
 
         return false;
-    }
-
-    // 表示中のテキストの「先頭の1文字」のみをチェックして削除する
-    private void TryRemoveCharFromTexts(char c)
-    {
-        // まず EnglishText の先頭文字を優先してチェック
-        if (!string.IsNullOrEmpty(EnglishText.text))
-        {
-            char first = EnglishText.text[0];
-            if (char.ToLowerInvariant(first) == char.ToLowerInvariant(c))
-            {
-                EnglishText.text = EnglishText.text.Remove(0, 1);
-            }
-            return;
-        }
     }
 
     private void OnSelect()
@@ -110,6 +110,6 @@ public class Theme : MonoBehaviour
         int rand = Random.Range(0, _selectedIndex);
         // 生成されたランダムな整数を使用して、配列から要素を取得
         JapaneseText.text = _yells.YellTextDataArray[rand].JapaneseText;
-        EnglishText.text = _yells.YellTextDataArray[rand].EnglishText;
+        EnglishText.text = _yells.YellTextDataArray[rand].EnglishText.ToUpper();
     }
 }

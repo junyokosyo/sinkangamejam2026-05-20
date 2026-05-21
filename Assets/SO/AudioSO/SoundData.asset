@@ -1,0 +1,90 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 820c28ba7004e2d4082f4036c97ab714, type: 3}
+  m_Name: SoundData
+  m_EditorClassIdentifier: 
+  soundDataArray:
+  - type: 0
+    clip: {fileID: 8300000, guid: 042fdc4699eb9054498406194f540eba, type: 3}
+    volume: 0.503
+    pitch: 0
+    loop: 0
+  - type: 1
+    clip: {fileID: 8300000, guid: cce14f14ae615b4429222066ee1e0e51, type: 3}
+    volume: 0.509
+    pitch: 0
+    loop: 0
+  - type: 2
+    clip: {fileID: 8300000, guid: dbe3f9510c0e4e54e97f18b5a01464b2, type: 3}
+    volume: 0.497
+    pitch: 0
+    loop: 0
+  - type: 3
+    clip: {fileID: 8300000, guid: 06d9e6aee1fd46142bb77d9cd35730d7, type: 3}
+    volume: 0.491
+    pitch: 0
+    loop: 0
+  - type: 4
+    clip: {fileID: 8300000, guid: 3d6fd5a63a367104b8d1f113ade9f13a, type: 3}
+    volume: 0.503
+    pitch: 0
+    loop: 0
+  - type: 5
+    clip: {fileID: 8300000, guid: 382579ea55ee8354b9a937f1e26105e1, type: 3}
+    volume: 0.472
+    pitch: 0
+    loop: 0
+  - type: 6
+    clip: {fileID: 8300000, guid: 930b6355fc50a2f418ab0d2aa7cb273e, type: 3}
+    volume: 0.534
+    pitch: 0
+    loop: 0
+  - type: 7
+    clip: {fileID: 8300000, guid: 3f93c6e31316a1f448d002bd8c384a93, type: 3}
+    volume: 0.497
+    pitch: 0
+    loop: 0
+  - type: 8
+    clip: {fileID: 8300000, guid: 150a51725717e3a488f1f0e3ee6e640d, type: 3}
+    volume: 0.515
+    pitch: 0
+    loop: 0
+  - type: 9
+    clip: {fileID: 8300000, guid: 5f3361e443dfafb45b440a906b038157, type: 3}
+    volume: 0.479
+    pitch: 0
+    loop: 0
+  - type: 10
+    clip: {fileID: 8300000, guid: 365b85c11955f0b40b4fd39042cd6fe9, type: 3}
+    volume: 0.448
+    pitch: 0
+    loop: 0
+  - type: 11
+    clip: {fileID: 8300000, guid: 5d2b09d2b308f4a46b1ed6c4be0e88ca, type: 3}
+    volume: 0.423
+    pitch: 0
+    loop: 0
+  - type: 12
+    clip: {fileID: 8300000, guid: c0bacd41e9a26474584da09b003599e0, type: 3}
+    volume: 0.528
+    pitch: 0
+    loop: 1
+  - type: 13
+    clip: {fileID: 8300000, guid: 9477ec744b64caa4b9d131a3540023dd, type: 3}
+    volume: 0.448
+    pitch: 0.1
+    loop: 1
+  - type: 14
+    clip: {fileID: 8300000, guid: e52e02e25c7546f4fa576eceaf85a4af, type: 3}
+    volume: 0.546
+    pitch: 0.1
+    loop: 1
