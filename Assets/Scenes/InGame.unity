@@ -402,12 +402,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 286848847}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.47252518, y: -0.54721737, z: -0.03608622}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -959.52747, y: -540.54724, z: -0.03608622}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1122074844}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &415107099
 GameObject:
@@ -2045,6 +2045,7 @@ RectTransform:
   - {fileID: 1821028754}
   - {fileID: 655597718}
   - {fileID: 1633504624}
+  - {fileID: 286848849}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -2108,7 +2109,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: adc4f168c1f45894b8045684cb112dbf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _yells: {fileID: 11400000, guid: 493ec281d1dbcdf4ca4c96151b330c64, type: 2}
+  _yells: {fileID: 11400000, guid: 9ca527c20946a9d41a938f601cbdb738, type: 2}
   JapaneseText: {fileID: 1501966454}
   EnglishText: {fileID: 2046849929}
   _backgroundImage: {fileID: 415107101}
@@ -3920,7 +3921,6 @@ SceneRoots:
   - {fileID: 1667320092}
   - {fileID: 193488243}
   - {fileID: 1122074844}
-  - {fileID: 286848849}
   - {fileID: 436584425}
   - {fileID: 1349586532}
   - {fileID: 1950839389}
