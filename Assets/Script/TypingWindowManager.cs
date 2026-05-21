@@ -107,6 +107,11 @@ public class TypingWindowManager : MonoBehaviour
         }
     }
 
+    public void Clear()
+    {
+        _backgroundImage.gameObject.SetActive(false);
+    }
+
     private IEnumerator NoMissText(float duration)
     {
         _noMissText.gameObject.SetActive(true);
