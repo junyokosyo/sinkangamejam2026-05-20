@@ -10,6 +10,7 @@ public class TitleManager : MonoBehaviour
     void Start()
     {
         startButton.onClick.AddListener(OnStart);
+        AudioManager.Instance.PlayBGM(SoundType.TitleBGM);
     }
     public void OnStart()
     {
