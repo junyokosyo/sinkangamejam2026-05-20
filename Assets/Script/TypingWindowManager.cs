@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -71,24 +72,21 @@ public class TypingWindowManager : MonoBehaviour
 
     private void CheckInputKey(char keyChar)
     {
-        // 不一致でミス扱い
-        if (keyChar != currentText[0])
-        {
-            Debug.Log(keyChar);
-            AudioManager.Instance.PlaySE(SoundType.TypingMissSE);
-            _isMissing = true;
-            return;
-        }
-
         if (!string.IsNullOrEmpty(currentText))
         {
             char first = currentText[0];
             if (char.ToUpperInvariant(first) == char.ToUpperInvariant(keyChar))
             {
+                AudioManager.Instance.PlaySE(SoundType.TypingSE);
                 var newMsg = currentText[1..];
                 UpdateText(newMsg);
                 currentText = newMsg;
-                AudioManager.Instance.PlaySE(SoundType.TypingSE);
+            }
+            else
+            {
+                AudioManager.Instance.PlaySE(SoundType.TypingMissSE);
+                _isMissing = true;
+                return;
             }
         }
 
@@ -100,6 +98,7 @@ public class TypingWindowManager : MonoBehaviour
             AudioManager.Instance.PlaySE(SoundType.YellSE);
             if (!_isMissing)
             {
+                StopAllCoroutines();
                 StartCoroutine(NoMissText(0.5f));
             }
 
@@ -150,8 +149,9 @@ public class TypingWindowManager : MonoBehaviour
         // 0から配列の長さまでのランダムな整数を生成
         int rand = Random.Range(0, _selectedIndex);
         // 生成されたランダムな整数を使用して、配列から要素を取得
-        JapaneseText.SetText(_yells.YellTextDataArray[rand].JapaneseText);
-        currentText = _yells.YellTextDataArray[rand].EnglishText.ToUpper();
+        var yellData = _yells.YellTextDataArray[rand];
+        JapaneseText.SetText(yellData.JapaneseText);
+        currentText = yellData.EnglishText.ToUpper();
         UpdateText(currentText);
     }
 
@@ -161,7 +161,13 @@ public class TypingWindowManager : MonoBehaviour
         if (msg.Length > 0)
         {
             string colorHex = ColorUtility.ToHtmlStringRGB(_firstCharColor);
-            string coloredMsg = $"<color=#{colorHex}>{msg[0]}</color>{msg[1..]}";
+            string coloredMsg = new StringBuilder().Append("<color=#")
+                .Append(colorHex)
+                .Append(">")
+                .Append(msg[0])
+                .Append("</color>")
+                .Append(msg[1..])
+                .ToString();
             EnglishText.SetText(coloredMsg);
         }
         else
