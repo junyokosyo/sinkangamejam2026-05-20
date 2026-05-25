@@ -7,23 +7,23 @@ public class TitleManager : MonoBehaviour
     [SerializeField] private Button rankingButton;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private void Start()
     {
         rankingButton.onClick.AddListener(OnRanking);
         startButton.onClick.AddListener(OnStart);
-        startButton.onClick.AddListener(() => AudioManager.Instance.PlaySE(SoundType.UISelectSE));
-        startButton.onClick.AddListener(() => AudioManager.Instance.StopBGM());
         AudioManager.Instance.PlayBGM(SoundType.TitleBGM);
     }
 
-    public void OnStart()
+    private static void OnStart()
     {
+        AudioManager.Instance.StopBGM();
         AudioManager.Instance.PlaySE(SoundType.UISelectSE);
         SceneTransition.Instance.SceneLoad(SceneName.InGame);
     }
 
-    public void OnRanking()
+    private static void OnRanking()
     {
+        AudioManager.Instance.StopBGM();
         AudioManager.Instance.PlaySE(SoundType.UISelectSE);
         SceneTransition.Instance.SceneLoad(SceneName.Clear);
     }
