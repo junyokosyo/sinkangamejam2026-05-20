@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using unityroom.Api;
 
 public class GameUI : MonoBehaviour
 {
@@ -83,6 +84,7 @@ public class GameUI : MonoBehaviour
         {
             gameStart = false;
             distanceText.SetText("GOAL!");
+            UnityroomApiClient.Instance.SendScore(1, scoreTimer, ScoreboardWriteMode.HighScoreAsc);
             RankingManager.SaveRanking(scoreTimer);
             OnClear?.Invoke();
         }
