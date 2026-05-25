@@ -11,7 +11,7 @@ public class ResultUI : MonoBehaviour
         {
             float time =
                 PlayerPrefs.GetFloat(
-                    "Rank" + i,
+                    $"Rank{i}",
                     9999f
                 );
 
@@ -19,14 +19,13 @@ public class ResultUI : MonoBehaviour
             if (time == 9999f)
             {
                 rankingTexts[i].text =
-                    "No."+(i + 1) + ": ---";
+                    $"No.{(i + 1)}: ---";
 
                 continue;
             }
 
             rankingTexts[i].text =
-                "No."+(i + 1) + ": "+
-                time.ToString("F2") + "[s]";
+                $"No.{(i + 1)}: {time:F2}[s]";
         }
     }
 }
