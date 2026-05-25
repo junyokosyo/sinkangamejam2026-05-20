@@ -49,6 +49,7 @@ public class InGameManager : MonoBehaviour
 
     private void StopGame(bool isCleared)
     {
+        StopAllCoroutines();
         currentVelocity = 0;
         SetSpeed(currentVelocity);
         gameUI.StopTimer();
@@ -60,7 +61,7 @@ public class InGameManager : MonoBehaviour
         StartCoroutine(isCleared ? Clear(WAIT_TIME) : GameOver(WAIT_TIME));
     }
 
-    private IEnumerator GameOver(float waitTime)
+    private static IEnumerator GameOver(float waitTime)
     {
         yield return new WaitForSeconds(waitTime);
         AudioManager.Instance.StopBGM();
