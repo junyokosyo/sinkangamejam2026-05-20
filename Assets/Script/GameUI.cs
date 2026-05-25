@@ -30,7 +30,7 @@ public class GameUI : MonoBehaviour
 
     private void Start()
     {
-        for (int i = 0; i < 15; i++)
+        for (int i = 0; i < 20; i++)
         {
             var text = Instantiate(addSpeedText, addSpeedTextPos.position, Quaternion.identity, addSpeedTextPos);
             text.gameObject.SetActive(false);

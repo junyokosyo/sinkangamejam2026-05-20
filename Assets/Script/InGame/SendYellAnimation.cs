@@ -24,7 +24,7 @@ public class SendYellAnimation : MonoBehaviour
         {
             _canvasRect = canvas.GetComponent<RectTransform>();
         }
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 20; i++)
         {
             var target = Instantiate(yellText, yellPos.position, yellPos.rotation, yellPos.transform);
             textQueue.Enqueue(target);

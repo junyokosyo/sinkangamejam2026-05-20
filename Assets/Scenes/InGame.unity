@@ -2155,12 +2155,12 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 3.1619034
-      outSlope: 3.1619034
+      inSlope: 3.5604393
+      outSlope: 3.5604393
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.041666668
+      outWeight: 0.036111116
     - serializedVersion: 3
       time: 1
       value: 1
@@ -2185,7 +2185,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: adc4f168c1f45894b8045684cb112dbf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _yells: {fileID: 11400000, guid: 493ec281d1dbcdf4ca4c96151b330c64, type: 2}
+  _yells: {fileID: 11400000, guid: 9ca527c20946a9d41a938f601cbdb738, type: 2}
   JapaneseText: {fileID: 1501966454}
   EnglishText: {fileID: 2046849929}
   _backgroundImage: {fileID: 415107101}
