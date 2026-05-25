@@ -17,9 +17,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/InGame.unity
     guid: dc4eecfda8a6fa44789e9fa001ea3cf1
-  - enabled: 1
-    path: Assets/Scenes/Ranking.unity
-    guid: 40272bf78ba26d54f8bc165a6e24e3ad
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0
