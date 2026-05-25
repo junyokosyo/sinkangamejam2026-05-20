@@ -81,7 +81,7 @@ public class AudioManager : MonoBehaviour
     public void SetBGMPitch(float pitch)
     {
         StopAllCoroutines();
-        StartCoroutine(SetBGMPitchAsync(pitch, 0.35f));
+        StartCoroutine(SetBGMPitchAsync(pitch, 0.5f));
     }
 
     private IEnumerator SetBGMPitchAsync(float pitch, float duration)
@@ -91,7 +91,7 @@ public class AudioManager : MonoBehaviour
 
         while (time < duration)
         {
-            time += Time.deltaTime;
+            time += Time.unscaledDeltaTime;
             bgmSource.pitch = Mathf.Lerp(startPitch, pitch, time / duration);
             yield return null;
         }
