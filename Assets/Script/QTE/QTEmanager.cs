@@ -44,6 +44,8 @@ public class QTEManager : MonoBehaviour
         canvasGroup.alpha = 0f;
         canvasGroup.gameObject.SetActive(false);
         
+        currentQTETimeLimit = timeLimit;
+        
         _inputSubscription = InputSystem.onAnyButtonPress.Call(OnAnyKeyPressed);
     }
 
