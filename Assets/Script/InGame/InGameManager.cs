@@ -52,15 +52,11 @@ public class InGameManager : MonoBehaviour
         currentVelocity = 0;
         SetSpeed(currentVelocity);
         gameUI.StopTimer();
+        enemySpawner.GameEnd();
+        qTEManager.GameEnd();
 
-        if (isCleared)
-        {
-            StartCoroutine(Clear(2.5f));
-        }
-        else
-        {
-            StartCoroutine(GameOver(2.5f));
-        }
+        const float WAIT_TIME = 2.5f;
+        StartCoroutine(isCleared ? Clear(WAIT_TIME) : GameOver(WAIT_TIME));
     }
 
     private IEnumerator GameOver(float waitTime)
@@ -86,9 +82,9 @@ public class InGameManager : MonoBehaviour
         var value = additiveSpeed * (isMistaken ? 1 : noMistakeMultiply);
         currentVelocity += value;
         gameUI.AddSpeedText(value);
-        qTEManager.successCount++;
-        player.PlayerSpeed *= 1.1f;
-        StartCoroutine(sendYellAnimation.PlayAnimation());
+        qTEManager.SpeedUpQTE();
+        player.MultiplySpeed(1.1f);
+        sendYellAnimation.Play();
         SetSpeed(currentVelocity);
     }
 
@@ -96,7 +92,7 @@ public class InGameManager : MonoBehaviour
     {
         if (!isSucceed)
         {
-            player.PlayerSpeed = 1f;
+            player.ResetSpeed();
             currentVelocity = defaultMoveSpeed;
             SetSpeed(currentVelocity);
         }

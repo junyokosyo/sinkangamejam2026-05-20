@@ -33,7 +33,7 @@ public class QTEManager : MonoBehaviour
     public event Action<bool> OnQTESwitched;
     public event Action<bool> OnQTEFinished;
 
-    public int successCount;
+    private float currentQTETimeLimit;
 
     private Coroutine _coroutine;
     private IDisposable _inputSubscription;
@@ -48,6 +48,11 @@ public class QTEManager : MonoBehaviour
     }
 
     private void OnDestroy()
+    {
+        _inputSubscription?.Dispose();
+    }
+
+    public void GameEnd()
     {
         _inputSubscription?.Dispose();
     }
@@ -81,13 +86,19 @@ public class QTEManager : MonoBehaviour
         }
     }
 
+    public void SpeedUpQTE()
+    {
+        // 呼び出し毎にQTEの時間制限を減らす
+        currentQTETimeLimit = Mathf.Max(timeLimitMin, currentQTETimeLimit - timeLimitDecreasePerSuccess);
+    }
+
     // QTE開始
     public void StartQTE()
     {
         // 二重起動防止
         if (isQTEActive) return;
 
-        timer = Mathf.Max(timeLimitMin, timeLimit - successCount * timeLimitDecreasePerSuccess);
+        timer = currentQTETimeLimit;
         Debug.Log(timer);
 
         isQTEActive = true;
@@ -148,7 +159,7 @@ public class QTEManager : MonoBehaviour
     private void Fail()
     {
         player.TakeDamage(1);
-        successCount = 0;
+        currentQTETimeLimit = timeLimit;
         OnQTEFinished?.Invoke(false);
         
         AudioManager.Instance.PlaySE(SoundType.CarCrashSE);

@@ -30,11 +30,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Image heartImage;
 
     public Action OnDeath;
-
-    public float PlayerSpeed
+    public void ResetSpeed()
     {
-        get => animator.speed;
-        set => animator.speed = value;
+        animator.speed = 1;
+    }
+
+    public void MultiplySpeed(float multiplier)
+    {
+        animator.speed *= multiplier;
     }
 
     private void Start()
@@ -178,7 +181,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D other)
+    private void OnCollisionEnter2D()
     {
         animator.SetBool("IsJumping", false);
     }

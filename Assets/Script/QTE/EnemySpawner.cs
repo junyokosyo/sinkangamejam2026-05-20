@@ -28,6 +28,14 @@ public class EnemySpawner : MonoBehaviour
         InGameManager.OnStart += () => _isActive = true;
         qteManager.OnQTEFinished += SetEnemyActiveByQTE;
     }
+
+    public void GameEnd()
+    {
+        if (currentEnemy != null)
+        {
+            Destroy(currentEnemy.gameObject);
+        }
+    }
     
     public void SetEnemySpeed(float speed)
     {
