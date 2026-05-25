@@ -3,10 +3,8 @@ using UnityEngine.UI;
 
 public class TitleManager : MonoBehaviour
 {
-    [SerializeField]
-    private Button startButton;
-    [SerializeField]
-    private Button rankingButton;
+    [SerializeField] private Button startButton;
+    [SerializeField] private Button rankingButton;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -17,13 +15,16 @@ public class TitleManager : MonoBehaviour
         startButton.onClick.AddListener(() => AudioManager.Instance.StopBGM());
         AudioManager.Instance.PlayBGM(SoundType.TitleBGM);
     }
+
     public void OnStart()
     {
+        AudioManager.Instance.PlaySE(SoundType.UISelectSE);
         SceneTransition.Instance.SceneLoad(SceneName.InGame);
     }
-    public void OnRanking() 
-    {
-     SceneTransition.Instance.SceneLoad(SceneName.Clear);
-    }
 
+    public void OnRanking()
+    {
+        AudioManager.Instance.PlaySE(SoundType.UISelectSE);
+        SceneTransition.Instance.SceneLoad(SceneName.Clear);
+    }
 }
