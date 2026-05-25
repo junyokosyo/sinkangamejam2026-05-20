@@ -1,36 +1,43 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 
 public class SendYellAnimation : MonoBehaviour
 {
-    [SerializeField] private Transform yellImage;
+    [SerializeField] private TMP_Text yellText;
+    [SerializeField] private Transform yellPos;
     [SerializeField] private float animationDuration = 1.0f;
     [SerializeField] private AnimationCurve animationCurve;
     [SerializeField] private Vector2 direction;
 
-    public IEnumerator PlayAnimation()
+    public void Play()
     {
-        var go = Instantiate(yellImage, yellImage.position, yellImage.rotation, yellImage.transform);
+        var target = Instantiate(yellText, yellPos.position, yellPos.rotation, yellPos.transform);
+        StartCoroutine(PlayAnimationAsync(target.transform));
+    }
+
+    private IEnumerator PlayAnimationAsync(Transform targetObject)
+    {
         float time = 0f;
-        Vector2 startPosition = go.position;
+        Vector2 startPosition = targetObject.position;
 
         while (time < animationDuration)
         {
             time += Time.deltaTime;
             float t = time / animationDuration;
             float curveValue = animationCurve.Evaluate(t);
-            go.position = startPosition + direction * curveValue;
+            targetObject.position = startPosition + direction * curveValue;
             yield return null;
         }
-        
-        Destroy(go.gameObject);
+
+        Destroy(targetObject.gameObject);
     }
 
     private void OnDrawGizmosSelected()
     {
-        if (yellImage != null)
+        if (yellPos != null)
         {
-            Vector2 startPosition = yellImage.position;
+            Vector2 startPosition = yellPos.position;
             Vector2 endPosition = startPosition + direction;
             Gizmos.color = Color.red;
             Gizmos.DrawLine(startPosition, endPosition);
