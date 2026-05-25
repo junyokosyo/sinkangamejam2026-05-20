@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -75,6 +76,27 @@ public class AudioManager : MonoBehaviour
         bgmSource.loop = sound.loop;
 
         bgmSource.Play();
+    }
+
+    public void SetBGMPitch(float pitch)
+    {
+        StopAllCoroutines();
+        StartCoroutine(SetBGMPitchAsync(pitch, 0.35f));
+    }
+
+    private IEnumerator SetBGMPitchAsync(float pitch, float duration)
+    {
+        float startPitch = bgmSource.pitch;
+        float time = 0f;
+
+        while (time < duration)
+        {
+            time += Time.deltaTime;
+            bgmSource.pitch = Mathf.Lerp(startPitch, pitch, time / duration);
+            yield return null;
+        }
+
+        bgmSource.pitch = pitch;
     }
 
     public void StopBGM()

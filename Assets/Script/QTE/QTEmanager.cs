@@ -107,6 +107,7 @@ public class QTEManager : MonoBehaviour
 
         // 超スロー
         Time.timeScale = slowMotionScale;
+        AudioManager.Instance.SetBGMPitch(slowMotionScale);
 
         // PUSH L 表示
         if (canvasGroup != null)
@@ -176,6 +177,7 @@ public class QTEManager : MonoBehaviour
 
         // 時間を戻す
         Time.timeScale = 1f;
+        AudioManager.Instance.SetBGMPitch(1f);
 
         // PUSH L 非表示
         if (canvasGroup != null)
