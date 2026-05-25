@@ -167,8 +167,23 @@ public class GameUI : MonoBehaviour
         timerText.SetText($"タイム:{scoreTimer:F2}s");
     }
 
-    public void UpdateVelocityText(float velocity)
+    public void SetVelocityText(float velocity)
     {
         velocityText.SetText($"はやさ:{velocity:F1} m/s");
+    }
+    
+    public IEnumerator AnimateVelocityText(float from, float to, float duration)
+    {
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            float currentVelocity = Mathf.Lerp(from, to, elapsed / duration);
+            SetVelocityText(currentVelocity);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        SetVelocityText(to);
     }
 }

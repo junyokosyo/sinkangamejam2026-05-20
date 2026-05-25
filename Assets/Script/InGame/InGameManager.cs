@@ -79,6 +79,7 @@ public class InGameManager : MonoBehaviour
 
     private void SpeedUp(bool isMistaken)
     {
+        var beforeVelocity = currentVelocity;
         var value = additiveSpeed * (isMistaken ? 1 : noMistakeMultiply);
         currentVelocity += value;
         gameUI.AddSpeedText(value);
@@ -86,6 +87,7 @@ public class InGameManager : MonoBehaviour
         player.MultiplySpeed(1.1f);
         sendYellAnimation.Play();
         SetSpeed(currentVelocity);
+        StartCoroutine(gameUI.AnimateVelocityText(beforeVelocity, currentVelocity, 0.2f));
     }
 
     private void QTECheck(bool isSucceed)
@@ -101,8 +103,8 @@ public class InGameManager : MonoBehaviour
     private void SetSpeed(float speed)
     {
         backGroundMover.SetSpeed(speed);
-        gameUI.UpdateVelocityText(speed);
         enemySpawner.SetEnemySpeed(speed * 1.5f);
+        gameUI.SetVelocityText(speed);
     }
 
     private IEnumerator MoveGoalPosition()
@@ -122,7 +124,6 @@ public class InGameManager : MonoBehaviour
             {
                 _hasReachedGoal = true;
             }
-            gameUI.UpdateVelocityText(currentVelocity);
         }
     }
 }
