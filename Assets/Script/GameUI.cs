@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -9,8 +10,11 @@ public class GameUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI distanceText;
     [SerializeField] private TMP_Text velocityText;
     [SerializeField] private TMP_Text timerText;
-    [SerializeField] private Transform addSpeedTextPos;
+    [SerializeField] private RectTransform addSpeedTextPos;
+    [SerializeField] private RectTransform addSpeedEndPos;
     [SerializeField] private TMP_Text addSpeedText;
+    [SerializeField] private RectTransform clearStartAnchor;
+    [SerializeField] private RectTransform clearEndAnchor;
 
     [Header("Player")] [SerializeField] private Transform player;
     [Header("Goal")] [SerializeField] private Transform goalPos;
@@ -21,10 +25,18 @@ public class GameUI : MonoBehaviour
     private float scoreTimer;
     public event Action OnCountDownComplete;
     public event Action OnClear;
+    
+    private readonly Queue<TMP_Text> textQueue = new();
 
     private void Start()
     {
-        timerText.text = $"タイム:{scoreTimer:F2}s";
+        for (int i = 0; i < 15; i++)
+        {
+            var text = Instantiate(addSpeedText, addSpeedTextPos.position, Quaternion.identity, addSpeedTextPos);
+            text.gameObject.SetActive(false);
+            textQueue.Enqueue(text);
+        }
+        timerText.SetText($"タイム:{scoreTimer:F2}s");
         UpdateDistanceText();
         StartCoroutine(CountDown());
     }
@@ -37,20 +49,20 @@ public class GameUI : MonoBehaviour
     public void Clear()
     {
         countDownText.enabled = true;
-        countDownText.text = "GOAL!";
-        StartCoroutine(MoveX(10, 1900, -1900));
+        countDownText.SetText("GOAL!");
+
+        StartCoroutine(MoveStartToEndAsync(clearStartAnchor, clearEndAnchor, 3));
     }
 
-    private IEnumerator MoveX(float duration, float from, float to)
+    private IEnumerator MoveStartToEndAsync(RectTransform from, RectTransform to, float duration)
     {
-        Vector3 startPos = countDownText.transform.position;
-        startPos.x = from;
-        Vector3 endPos = new Vector3(to, startPos.y, startPos.z);
+        Vector3 startPos = from.position;
+        Vector3 endPos = to.position;
 
         float elapsed = 0f;
         while (elapsed < duration)
         {
-            var t = curve.Evaluate(elapsed / duration);
+            var t = elapsed / duration;
             countDownText.transform.position = Vector3.Lerp(startPos, endPos, t);
             elapsed += Time.deltaTime;
             yield return null;
@@ -70,7 +82,7 @@ public class GameUI : MonoBehaviour
         if (remainDistance <= 0)
         {
             gameStart = false;
-            distanceText.text = "GOAL!";
+            distanceText.SetText("GOAL!");
             RankingManager.SaveRanking(scoreTimer);
             OnClear?.Invoke();
         }
@@ -82,15 +94,16 @@ public class GameUI : MonoBehaviour
 
     public void AddSpeedText(float amount)
     {
-        var text = Instantiate(addSpeedText, addSpeedTextPos.position, Quaternion.identity, addSpeedTextPos);
+        var text = textQueue.Dequeue();
+        text.gameObject.SetActive(true);
         text.SetText($"+{amount:F2}m/s");
-        StartCoroutine(MoveAndDestroy(text, 100, 1));
+        StartCoroutine(MoveAndDestroy(text, addSpeedTextPos, addSpeedEndPos, 1));
     }
 
-    private IEnumerator MoveAndDestroy(TMP_Text text, float distance, float duration)
+    private IEnumerator MoveAndDestroy(TMP_Text text, RectTransform from, RectTransform to, float duration)
     {
-        Vector3 startPos = text.transform.position;
-        Vector3 endPos = startPos + Vector3.up * distance;
+        Vector2 startPos = from.position;
+        Vector2 endPos = to.position;
         Color startColor = text.color;
 
         float elapsed = 0f;
@@ -102,8 +115,12 @@ public class GameUI : MonoBehaviour
             elapsed += Time.deltaTime;
             yield return null;
         }
-
-        Destroy(text.gameObject);
+        
+        // プールに戻す
+        text.transform.position = startPos;
+        text.color = startColor;
+        text.gameObject.SetActive(false);
+        textQueue.Enqueue(text);
     }
 
     private float UpdateDistanceText()
@@ -113,7 +130,7 @@ public class GameUI : MonoBehaviour
 
         remainDistance = Mathf.Max(0, remainDistance);
 
-        distanceText.text = $"おうちまで あと {remainDistance:F1}m";
+        distanceText.SetText($"おうちまで あと {remainDistance:F1}m");
         return remainDistance;
     }
 
@@ -126,30 +143,30 @@ public class GameUI : MonoBehaviour
         AudioManager.Instance.PlaySE(SoundType.CountDownSE);
 
         int startCount = 3;
-        countDownText.text = startCount.ToString();
+        countDownText.SetText(startCount.ToString());
         while (startCount-- > 0)
         {
             yield return new WaitForSeconds(1);
-            countDownText.text = startCount.ToString();
+            countDownText.SetText(startCount.ToString());
         }
 
-        countDownText.text = "START!";
+        countDownText.SetText("START!");
 
         yield return new WaitForSeconds(1);
         OnCountDownComplete?.Invoke();
 
-        countDownText.text = "";
+        countDownText.SetText("");
         gameStart = true;
     }
 
     private void ScoreTimer()
     {
         scoreTimer += Time.deltaTime;
-        timerText.text = $"タイム:{scoreTimer:F2}s";
+        timerText.SetText($"タイム:{scoreTimer:F2}s");
     }
 
     public void UpdateVelocityText(float velocity)
     {
-        velocityText.text = $"はやさ:{velocity:F1} m/s";
+        velocityText.SetText($"はやさ:{velocity:F1} m/s");
     }
 }

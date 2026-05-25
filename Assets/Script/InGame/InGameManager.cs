@@ -54,6 +54,7 @@ public class InGameManager : MonoBehaviour
         gameUI.StopTimer();
         enemySpawner.GameEnd();
         qTEManager.GameEnd();
+        typingWindowManager.GameEnd();
 
         const float WAIT_TIME = 2.5f;
         StartCoroutine(isCleared ? Clear(WAIT_TIME) : GameOver(WAIT_TIME));
@@ -71,7 +72,6 @@ public class InGameManager : MonoBehaviour
         AudioManager.Instance.PlaySE(SoundType.ResultClearSE);
         player.Clear();
         gameUI.Clear();
-        typingWindowManager.Clear();
         yield return new WaitForSeconds(waitTime);
         AudioManager.Instance.StopBGM();
         SceneTransition.Instance.SceneLoad(SceneName.Clear);

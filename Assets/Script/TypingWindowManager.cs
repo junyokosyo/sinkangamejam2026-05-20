@@ -107,7 +107,7 @@ public class TypingWindowManager : MonoBehaviour
         }
     }
 
-    public void Clear()
+    public void GameEnd()
     {
         _backgroundImage.gameObject.SetActive(false);
         _inputSubscription?.Dispose();
@@ -150,7 +150,7 @@ public class TypingWindowManager : MonoBehaviour
         // 0から配列の長さまでのランダムな整数を生成
         int rand = Random.Range(0, _selectedIndex);
         // 生成されたランダムな整数を使用して、配列から要素を取得
-        JapaneseText.text = _yells.YellTextDataArray[rand].JapaneseText;
+        JapaneseText.SetText(_yells.YellTextDataArray[rand].JapaneseText);
         currentText = _yells.YellTextDataArray[rand].EnglishText.ToUpper();
         UpdateText(currentText);
     }
@@ -162,11 +162,11 @@ public class TypingWindowManager : MonoBehaviour
         {
             string colorHex = ColorUtility.ToHtmlStringRGB(_firstCharColor);
             string coloredMsg = $"<color=#{colorHex}>{msg[0]}</color>{msg[1..]}";
-            EnglishText.text = coloredMsg;
+            EnglishText.SetText(coloredMsg);
         }
         else
         {
-            EnglishText.text = msg;
+            EnglishText.SetText(msg);
         }
     }
 }

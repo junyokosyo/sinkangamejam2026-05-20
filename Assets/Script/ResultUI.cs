@@ -18,14 +18,12 @@ public class ResultUI : MonoBehaviour
             // データなし
             if (time == 9999f)
             {
-                rankingTexts[i].text =
-                    $"No.{(i + 1)}: ---";
+                rankingTexts[i].SetText($"No.{(i + 1)}: ---");
 
                 continue;
             }
 
-            rankingTexts[i].text =
-                $"No.{(i + 1)}: {time:F2}[s]";
+            rankingTexts[i].SetText($"No.{(i + 1)}: {time:F2}[s]");
         }
     }
 }

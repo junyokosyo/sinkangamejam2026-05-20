@@ -79,7 +79,7 @@ public class QTEManager : MonoBehaviour
 
         // スロー中でも時間を進める
         timer -= Time.unscaledDeltaTime;
-        qteTimeLimit.text = $"{timer:F2}s";
+        qteTimeLimit.SetText($"{timer:F2}s");
 
         // 時間切れ
         if (timer <= 0f)
