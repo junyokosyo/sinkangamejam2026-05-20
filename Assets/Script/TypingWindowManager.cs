@@ -110,6 +110,7 @@ public class TypingWindowManager : MonoBehaviour
     public void Clear()
     {
         _backgroundImage.gameObject.SetActive(false);
+        _inputSubscription?.Dispose();
     }
 
     private IEnumerator NoMissText(float duration)
