@@ -157,7 +157,6 @@ MonoBehaviour:
   canvasGroup: {fileID: 1633504627}
   qteTimeLimit: {fileID: 970003775}
   successText: {fileID: 559726355}
-  successCount: 0
 --- !u!4 &193488243
 Transform:
   m_ObjectHideFlags: 0
@@ -2111,7 +2110,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: adc4f168c1f45894b8045684cb112dbf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _yells: {fileID: 11400000, guid: 493ec281d1dbcdf4ca4c96151b330c64, type: 2}
+  _yells: {fileID: 11400000, guid: 9ca527c20946a9d41a938f601cbdb738, type: 2}
   JapaneseText: {fileID: 1501966454}
   EnglishText: {fileID: 2046849929}
   _backgroundImage: {fileID: 415107101}
