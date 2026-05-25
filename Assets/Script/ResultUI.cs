@@ -16,7 +16,7 @@ public class ResultUI : MonoBehaviour
                 );
 
             // データなし
-            if (time == 9999f)
+            if (Mathf.Approximately(time, 9999f))
             {
                 rankingTexts[i].SetText($"No.{(i + 1)}: ---");
 
