@@ -12,40 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae2580d01fe6bf94f9ec888631c03a37, type: 3}
   m_Name: Yells
   m_EditorClassIdentifier: 
-  YellTextDataArray:
-  - JapaneseText: "\u30D5\u30A1\u30A4\u30C8"
-    EnglishText: faito
-  - JapaneseText: "\u304C\u3093\u3070\u308C"
-    EnglishText: ganbare
-  - JapaneseText: "\u3084\u308C\u3070\u3067\u304D\u308B"
-    EnglishText: yarebadekiru
-  - JapaneseText: "\u3044\u3048\u306B\u304B\u3048\u308D\u3046"
-    EnglishText: ienikaerou
-  - JapaneseText: "\u30CB\u30E3\u30CB\u30E3\u30CB\u30E3"
-    EnglishText: nyanyanya
-  - JapaneseText: "\u3042\u3068\u3059\u3053\u3057"
-    EnglishText: atosukosi
-  - JapaneseText: "\u306F\u3057\u308C\u306F\u3057\u308C"
-    EnglishText: hasirehasire
-  - JapaneseText: "\u307E\u3060\u307E\u3060\u3044\u3051\u308B"
-    EnglishText: madamadaikeru
-  - JapaneseText: "\u30CB\u30E3\u30A4\u30B9\u30D5\u30A1\u30A4\u30C8"
-    EnglishText: nyaisufaito
-  - JapaneseText: "\u3054\u306F\u3093\u304C\u307E\u3063\u3066\u3044\u308B\u3088"
-    EnglishText: gohangamatteiruyo
-  - JapaneseText: "\u304D\u307F\u306A\u3089\u3067\u304D\u308B"
-    EnglishText: kiminaradekiru
-  - JapaneseText: "\u305D\u306E\u3061\u3087\u3046\u3057\u3060\u3088"
-    EnglishText: sonotyousidayo
-  - JapaneseText: "\u304F\u308B\u307E\u306B\u304D\u3092\u3064\u3051\u3066"
-    EnglishText: kurumanikiwotukete
-  - JapaneseText: "\u3059\u3079\u3066\u3092\u304A\u304D\u3055\u308A\u306B\u3057\u3066"
-    EnglishText: subetewookisarinisite
-  - JapaneseText: "\u3076\u3061\u306C\u3044\u3066\u3084\u308C"
-    EnglishText: butinuiteyare
-  - JapaneseText: "\u3082\u3046\u3060\u308C\u306B\u3082\u3068\u3081\u3089\u308C\u306A\u3044"
-    EnglishText: moudarenimotomerarenai
-  - JapaneseText: "\u30CD\u30D0\u30FC\u30AE\u30D6\u30A2\u30C3\u30D7"
-    EnglishText: neba-gibuappu
-  - JapaneseText: "\u3052\u3093\u304B\u3044\u3092\u3053\u3048\u308D"
-    EnglishText: genkaiwokoero
+  JapaneseYell: []
+  EnglishYell: []
